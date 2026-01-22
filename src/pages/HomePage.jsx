@@ -1,17 +1,19 @@
 import React from 'react';
+
 import ProductCard from '../components/ProductCard';
 import ShopCard from '../components/ShopCard';
 import HeroSlider from '../components/HeroSlider';
 import BestsellerSection from '../components/BestsellerSection';
+import MostPopularSection from '../components/MostPopularSection';
+import CategoryBanner from '../components/CategoryBanner';
+import MostPopularLight from '../components/MostPopularLight';
+import BestsellersVertical from '../components/BestsellersVertical';
+
 
 const HomePage = () => {
     return (
 
-        //HeroSlider.jsx
-        //ShopCard.jsx
-        //ProductCard.jsx
-
-        <div className='space-y-6'>
+        <div className='space-y-10'>
             <HeroSlider />
 
             <section className='space-y-4'>
@@ -64,8 +66,31 @@ const HomePage = () => {
                 />
                 
             </section>
+            
+            <CategoryBanner
+                title="Furniture"
+                itemCount={5}
+                image="/images/card-cover-2.jpg"
+            />
 
             <BestsellerSection />
+
+            <MostPopularSection />
+
+            <CategoryBanner
+                title="Furniture"
+                itemCount={5}
+                image="/images/card-cover.jpg"
+            />
+
+            <BestsellerSection />
+
+            <MostPopularLight />
+
+            <BestsellersVertical />
+
+            
+
         </div>
     );
 };
