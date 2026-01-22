@@ -16,7 +16,7 @@ const HomePage = () => {
         <div className='space-y-10'>
             <HeroSlider />
 
-            <section className='space-y-4'>
+            <section className='grid gap-4 lg:grid-cols-3 lg:gap-6'>
                 <ShopCard
                     badge='Your Space'
                     title='Unique Life'
@@ -66,15 +66,17 @@ const HomePage = () => {
                 />
                 
             </section>
+
+            <div className='grid gap-8 lg:grid-cols-[1fr_2fr] lg:items-start'>
+                <CategoryBanner
+                    title="Furniture"
+                    itemCount={5}
+                    image="/images/card-cover-2.jpg"
+                />
+
+                <BestsellerSection />
+            </div>
             
-            <CategoryBanner
-                title="Furniture"
-                itemCount={5}
-                image="/images/card-cover-2.jpg"
-            />
-
-            <BestsellerSection />
-
             <MostPopularSection />
 
             <CategoryBanner

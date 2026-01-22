@@ -13,7 +13,7 @@ const CategoryBanner = ({
                 <img
                     src={image}
                     alt={title}
-                    className='w-full h-64 object-cover'
+                    className='w-full h-64 lg:h-full object-cover'
                 />
 
                 <div className='absolute top-4 left-4 bg-white bg-opacity-90 p-3 rounded-lg'>
