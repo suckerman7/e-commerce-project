@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ShoppingCart, Menu } from 'lucide-react';
+import { Search, ShoppingCart, Menu, Heart } from 'lucide-react';
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
@@ -21,11 +21,12 @@ const Header = () => {
                 </nav>
 
                 <div className='flex items-center gap-4'>
-                    <span className='hidden lg:flex text-sm text-[#23A6F0]'>
+                    <span className='hidden lg:flex text-sm font-bold text-[#23A6F0]'>
                         Login / Register
                     </span>
-                    <Search className='w-6 h-6 text-[#252B42]'/>
-                    <ShoppingCart className='w-[23.5px] h-4.5 text-[#252B42]'/>
+                    <Search className='w-4 h-4 text-[#23A6F0]'/>
+                    <ShoppingCart className='w-4 h-4 text-[#23A6F0]'/>
+                    <Heart className='w-4 h-4 text-[#23A6F0]' />
 
                     <button 
                         onClick={

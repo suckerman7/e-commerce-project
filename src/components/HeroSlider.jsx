@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const HeroSlider = () => {
     return (
-        <section className='relative bg-red-700 rounded-2xl overflow-hidden text-white font-montserrat h-100 lg:h-150 flex items-center'>
+        <section className='relative bg-red-700 rounded-2xl overflow-hidden text-white font-montserrat flex items-center min-h-75 lg:min-h-125'>
             <div className='p-6 lg:p-16 max-w-xl'>
                 <h2 className='font-bold text-[40px] mb-4 lg:text-[58px]'>
                     GROCERIES DELIVERY

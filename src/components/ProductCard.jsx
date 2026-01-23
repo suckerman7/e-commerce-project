@@ -36,7 +36,7 @@ const ProductCard = ({
                 </h3>
 
                 {department && (
-                    <p className='text-sm text-[#737373] mt-1'>
+                    <p className='text-sm text-[#737373] mt-1 font-bold'>
                         {department}
                     </p>
                 )}

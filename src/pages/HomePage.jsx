@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ProductCard from '../components/ProductCard';
 import ShopCard from '../components/ShopCard';
 import HeroSlider from '../components/HeroSlider';
 import BestsellerSection from '../components/BestsellerSection';
@@ -8,7 +7,9 @@ import MostPopularSection from '../components/MostPopularSection';
 import CategoryBanner from '../components/CategoryBanner';
 import MostPopularLight from '../components/MostPopularLight';
 import BestsellersVertical from '../components/BestsellersVertical';
-
+import ClientsSection from '../components/ClientsSection';
+import BlogSection from '../components/BlogSection';
+import BestsellerReverse from '../components/BestsellerReverse';
 
 const HomePage = () => {
     return (
@@ -39,59 +40,37 @@ const HomePage = () => {
                 />
             </section>
 
-            <section className='flex flex-col gap-4'>   
+            <section className='flex flex-col lg:flex-row gap-6'>
+                <div className='grid gap-8 lg:grid-cols-[1fr_2fr] lg:items-start'>
+                    <CategoryBanner
+                        title="Furniture"
+                        itemCount={5}
+                        image="/images/card-cover-2.jpg"
+                    />
 
-                <ProductCard
-                    image='/images/icecream.png'
-                    title='Graphic Design'
-                    department='English Department'
-                    oldPrice="16.48"
-                    price="6.48"
-                />
-
-                <ProductCard
-                    image='/images/apple.jpg'
-                    title='Graphic Design'
-                    department='English Department'
-                    oldPrice="16.48"
-                    price="6.48"
-                />
-
-                <ProductCard
-                    image='/images/steak.jpg'
-                    title='Graphic Design'
-                    department='English Department'
-                    oldPrice="16.48"
-                    price="6.48"
-                />
-                
+                    <BestsellerSection />
+                </div>
             </section>
-
-            <div className='grid gap-8 lg:grid-cols-[1fr_2fr] lg:items-start'>
-                <CategoryBanner
-                    title="Furniture"
-                    itemCount={5}
-                    image="/images/card-cover-2.jpg"
-                />
-
-                <BestsellerSection />
-            </div>
             
             <MostPopularSection />
 
-            <CategoryBanner
-                title="Furniture"
-                itemCount={5}
-                image="/images/card-cover.jpg"
-            />
+            <div className='flex flex-col gap-12 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-stretch'>
+                <BestsellerReverse />
 
-            <BestsellerSection />
+                <CategoryBanner
+                    title="Furniture"
+                    itemCount={5}
+                    image="/images/card-cover.jpg"
+                />
+            </div>
 
             <MostPopularLight />
 
             <BestsellersVertical />
 
-            
+            <ClientsSection />
+
+            <BlogSection />
 
         </div>
     );
