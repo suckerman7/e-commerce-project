@@ -5,7 +5,7 @@ const ClientsSection = () => {
 
     return (
         <section>
-            <div className='flex flex-col items-center gap-6 py-8 lg:flex-row lg:justify-around h-10 object-contain mx-auto lg:mx-0'>
+            <div className='flex flex-col items-center gap-6 py-8 lg:flex-row lg:justify-around mx-auto lg:mx-0'>
                 <FaHooli className={iconClass} />
                 <FaLyft className={iconClass} />
                 <FaPiedPiperHat className={iconClass} />

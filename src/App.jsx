@@ -7,19 +7,20 @@ import PageContent from './layout/PageContent';
 import HomePage from './pages/HomePage';
 import ShopPage from "./pages/ShopPage";
 
+import TopBar from './components/TopBar';
+
 function App() {
 
   return (
     <Router>
+      <TopBar />
       <Header />
 
       <PageContent>
         <Switch>
-          <Route exact-path='/' component={HomePage} />
+          <Route exact path='/' component={HomePage} />
 
-          <Route path='/shop' component={ShopPage}>
-            <div className='p-6'>Products Page</div>
-          </Route>
+          <Route path='/shop' component={ShopPage} />
 
           <Route path='/pricing'>
             <div className='p-6'>Pricing Page</div>

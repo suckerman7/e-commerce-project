@@ -60,7 +60,7 @@ const Footer = () => {
                 </div>
 
                 <div>
-                    <h5 className='font-bold mb-4'>Get In Touch</h5>
+                    <h5 className='font-bold mb-4'>Contact Us</h5>
                     <ul className='flex flex-col gap-4 text-sm font-bold'>
                         <li className='flex items-center gap-2 text-[#8EC2F2]'>
                             <Phone size={24} />
@@ -75,6 +75,26 @@ const Footer = () => {
                             debra.holt@example.com
                         </li>
                     </ul>
+                </div>
+
+                <div>
+                    <h5 className='font-bold mb-4'>Get In Touch</h5>
+
+                    <div className='flex w-full'>
+                        <input
+                            type="email"
+                            placeholder="Your Email"
+                            className='w-full lg:flex-1 px-4 py-3 text-sm border-[#E6E6E6] bg-[#F9F9F9] text-[#737373] outline-none' 
+                        />
+
+                        <button className='bg-[#23A6F0] text-white font-bold px-6 py-3 text-sm'>
+                            Subscribe
+                        </button>
+                    </div>
+
+                    <p className='text-xs text-[#737373] mt-4'>
+                        Lore imp sum dolor Amit
+                    </p>
                 </div>
             </div>
 
