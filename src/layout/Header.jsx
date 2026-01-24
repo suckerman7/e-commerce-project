@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ShoppingCart, Menu, Heart } from 'lucide-react';
+import { Search, ShoppingCart, Menu, Heart, User } from 'lucide-react';
 
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
@@ -14,19 +14,23 @@ const Header = () => {
 
                 <nav className='hidden lg:flex gap-6 text-sm font-bold text-[#737373]'>
                     <Link to='/'>Home</Link>
-                    <Link to='/products'>Shop</Link>
+                    <Link to='/shop'>Shop</Link>
                     <Link to='/about'>About</Link>
                     <Link to='/blog'>Blog</Link>
                     <Link to='/contact'>Contact</Link>
                 </nav>
 
-                <div className='flex items-center gap-4'>
-                    <span className='hidden lg:flex text-sm font-bold text-[#23A6F0]'>
+                <div className='hidden lg:flex items-center gap-4'>
+
+                    <span className='flex items-center gap-1 text-sm font-bold text-[#23A6F0]'>
+                        <User size={16} />
                         Login / Register
                     </span>
+
                     <Search className='w-4 h-4 text-[#23A6F0]'/>
                     <ShoppingCart className='w-4 h-4 text-[#23A6F0]'/>
                     <Heart className='w-4 h-4 text-[#23A6F0]' />
+                </div>
 
                     <button 
                         onClick={
@@ -41,7 +45,6 @@ const Header = () => {
                             <Menu className='w-5.75 h-3.5 text-[#252B42]'/>
                         )}
                     </button>
-                </div>
             </div>
 
             {openMenu && (
@@ -55,7 +58,7 @@ const Header = () => {
                     </Link>
 
                     <Link 
-                        to='/products'
+                        to='/shop'
                         onClick={() => setOpenMenu(false)}
                         className='text-3xl text-[#737373]'
                     >
@@ -77,6 +80,17 @@ const Header = () => {
                     >
                         Contact
                     </Link>
+
+                    <span className='flex items-center gap-1 text-3xl font-bold text-[#23A6F0]'>
+                        <User size={28} />
+                        Login / Register
+                    </span>
+
+                    <div className='flex flex-col gap-6'>
+                        <Search className='w-8.5 h-8.5 text-[#23A6F0]'/>
+                        <ShoppingCart className='w-8.5 h-8.5 text-[#23A6F0]'/>
+                        <Heart className='w-8.5 h-8.5 text-[#23A6F0]' />
+                    </div>
                 </nav>
             )}
         </header>

@@ -5,6 +5,7 @@ import Footer from "./layout/Footer";
 import PageContent from './layout/PageContent';
 
 import HomePage from './pages/HomePage';
+import ShopPage from "./pages/ShopPage";
 
 function App() {
 
@@ -16,7 +17,7 @@ function App() {
         <Switch>
           <Route exact-path='/' component={HomePage} />
 
-          <Route path='/products'>
+          <Route path='/shop' component={ShopPage}>
             <div className='p-6'>Products Page</div>
           </Route>
 

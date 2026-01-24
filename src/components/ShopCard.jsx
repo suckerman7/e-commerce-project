@@ -6,7 +6,7 @@ const ShopCard = ({
     title,
     subtitle,
     image,
-    link = "/products",
+    link = "/shop",
 }) => {
     return (
         <Link to={link} className="block h-full">
