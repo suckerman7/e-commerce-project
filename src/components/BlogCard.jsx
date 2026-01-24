@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, AlarmClock, ChartArea} from "lucide-react";
 
 const BlogCard = ({image, title, text, date, comments, isNew = false,}) => {
     return (
@@ -27,8 +27,8 @@ const BlogCard = ({image, title, text, date, comments, isNew = false,}) => {
                 </p>
 
                 <div className='flex justify-between text-xs text-[#737373] mt-4'>
-                    <span>{date}</span>
-                    <span>{comments} comments</span>
+                    <span className='flex items-center gap-1'><AlarmClock className='text-[#23A6F0]' size={14} /> {date}</span>
+                    <span className='flex items-center gap-1'><ChartArea className='text-[#23856D]' size={14} /> {comments} comments</span>
                 </div>
 
                 <button className='flex items-center gap-1 text-[#737373] text-sm mt-4'>

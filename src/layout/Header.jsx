@@ -33,6 +33,7 @@ const Header = () => {
                             () => setOpenMenu(!openMenu)
                         }
                         aria-label="Menu"
+                        className='lg:hidden'
                     >
                         {openMenu ? (
                             <Menu className='w-5.75 h-3.5 text-[#252B42]'/>

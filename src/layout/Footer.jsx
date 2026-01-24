@@ -3,20 +3,22 @@ import {Facebook, Instagram, Twitter, Youtube, Phone, MapPin, Mail} from 'lucide
 const Footer = () => {
     return (
         <footer className="bg-[#252B42] text-white mt-16 font-montserrat">
-            <div className="px-6 py-12 text-center border-b border-slate-700">
-                <h3 className='text-2xl font-bold mb-2'>
-                    Consulting Agency For Your Business
-                </h3>
-                <p className='text-sm mb-6'>
-                    the quick fox jumps over the lazy dog
-                </p>
+            <div className="px-6 py-12 border-b border-slate-700 flex flex-col items-center text-center gap-6 lg:flex-row lg:justify-around lg:text-left">
+                <div>
+                    <h3 className='text-2xl font-bold mb-2'>
+                        Consulting Agency For Your Business
+                    </h3>
+                    <p className='text-sm mb-6'>
+                        the quick fox jumps over the lazy dog
+                    </p>
+                </div>
 
-                <button className='text-sm bg-[#23A6F0] font-bold text-white px-6 py-3 rounded-lg'>
+                <button className='text-sm bg-[#23A6F0] font-bold text-white px-6 py-3 rounded-lg '>
                     Contact Us
                 </button>
             </div>
 
-            <div className='px-6 py-12 flex flex-col gap-10'>
+            <div className='px-6 py-12 flex flex-col gap-10 lg:grid lg:grid-cols-5 lg:gap-8'>
                 <div>
                     <h5 className='font-bold mb-4'>Company Info</h5>
                     <ul className='flex flex-col gap-2 text-sm font-bold'>
@@ -76,15 +78,17 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className='px-6 py-6 border-t border-slate-700 flex flex-col gap-4 items-center text-sm text-white'>
-                <h6>Made With Love By Finland</h6>
-                <h6>All Right Reserved</h6>
+            <div className='px-6 py-6 border-t border-slate-700 flex flex-col gap-4 items-center text-sm text-white lg:flex-row lg:justify-around'>
+                <div className='flex flex-col lg:flex-row lg:gap-2 font-bold'>
+                    <h6>Made With Love By Finland</h6>
+                    <h6>All Right Reserved</h6>
+                </div>
 
-                <div className='flex gap-4 text-white'>
-                    <Facebook size={24} />
-                    <Instagram size={24} />
-                    <Twitter size={24} />
-                    <Youtube size={24} />
+                <div className='flex gap-4'>
+                    <Facebook className='text-[#335BF5] lg:text-[#23A6F0]' size={24} />
+                    <Instagram className='text-[#E51F5A] lg:text-[#23A6F0]' size={24} />
+                    <Twitter className='text-[#21A6DF] lg:text-[#23A6F0]' size={24} />
+                    <Youtube className='text-[#E42F08] lg:text-[#23A6F0]' size={24} />
                 </div>
             </div>
         </footer>
