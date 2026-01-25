@@ -5,7 +5,7 @@ const CategoryBanner = ({
     title,
     itemCount,
     image,
-    link = "/products",
+    link = "/shop",
 }) => {
     return (
         <Link to={link} className="block h-full">

@@ -6,6 +6,7 @@ import PageContent from './layout/PageContent';
 
 import HomePage from './pages/HomePage';
 import ShopPage from "./pages/ShopPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 import TopBar from './components/TopBar';
 
@@ -21,6 +22,8 @@ function App() {
           <Route exact path='/' component={HomePage} />
 
           <Route path='/shop' component={ShopPage} />
+
+          <Route path='/productdetail' component={ProductDetailPage} />
 
           <Route path='/pricing'>
             <div className='p-6'>Pricing Page</div>
