@@ -29,8 +29,8 @@ const BestsellerReverse = () => {
 
             <div className="w-full h-px bg-[#ECECEC] my-6" />
 
-            <div className='flex gap-6 pb-4 overflow-x-auto lg:flex-wrap lg:overflow-visible lg:justify-between'>
-                <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
+            <div className='flex flex-col gap-6 pb-4 overflow-x-auto lg:flex-row lg:flex-wrap lg:overflow-visible lg:justify-between'>
+                <div className='w-full lg:w-[48%]'>
                     <ProductCard
                         image='/images/icecream.png'
                         title='Graphic Design'

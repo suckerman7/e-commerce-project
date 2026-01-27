@@ -10,9 +10,7 @@ const sliderImages = [
     },
 ]
 
-const ProductSlider = () => {
-
-    const [currentImage, setCurrentImage] = useState(0);
+const ProductSlider = ({ currentImage, setCurrentImage }) => {
 
     const prevImage = () => {
         setCurrentImage((prev) => (prev === 0 ? sliderImages.length - 1 : prev - 1));
@@ -25,12 +23,12 @@ const ProductSlider = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrentImage((prev) =>
-                prev === sliderImages.length - 1 ? 0 : prev - 1
+                prev === sliderImages.length - 1 ? 0 : prev + 1
             );
         }, 5000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [setCurrentImage]);
 
     const sliderImage = sliderImages[currentImage];
 
@@ -45,20 +43,6 @@ const ProductSlider = () => {
             <button onClick={nextImage} className='absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full'>
                 <ChevronRight />
             </button>
-
-            <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2'>
-                {sliderImages.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentImage(index)}
-                        className={`w-3 h-3 rounded-full transition ${
-                            index === currentImage
-                            ? 'bg-white'
-                            : 'bg-white/40'
-                        }`}
-                    />
-                ))}
-            </div>
         </section>
     );
 };

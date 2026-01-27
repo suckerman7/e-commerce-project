@@ -11,6 +11,8 @@ const ProductDetailPage = () => {
 
             <ProductDetail />
 
+            
+
             <ClientsSection />
         </>
     );

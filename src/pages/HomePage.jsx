@@ -40,8 +40,7 @@ const HomePage = () => {
                 />
             </section>
 
-            <section className='flex flex-col lg:flex-row gap-6'>
-                <div className='grid gap-8 lg:grid-cols-[1fr_2fr] lg:items-start'>
+            <section className='flex flex-col gap-12 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-stretch'>
                     <CategoryBanner
                         title="Furniture"
                         itemCount={5}
@@ -49,7 +48,6 @@ const HomePage = () => {
                     />
 
                     <BestsellerSection />
-                </div>
             </section>
             
             <MostPopularSection />

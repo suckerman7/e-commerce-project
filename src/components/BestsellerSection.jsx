@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const BestsellerSection = () => {
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
-            <div className='flex flex-col items-center gap-4 mb-8 lg:flex-row lg:items-center lg:justify-between'>
+            <div className='flex flex-col items-center gap-4 mb-8 lg:flex-row lg:justify-between'>
                 <h3 className='text-2xl lg:text-base font-bold mb-4 text-[#252B42] text-center lg:text-left'>
                      BESTSELLER PRODUCTS
                 </h3>
@@ -29,8 +29,8 @@ const BestsellerSection = () => {
 
             <div className="w-full h-px bg-[#ECECEC] my-6" />
 
-                <div className='flex gap-6 pb-4 overflow-x-auto lg:flex-wrap lg:overflow-visible lg:justify-between'>
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
+                <div className='flex flex-col gap-6 pb-4 overflow-x-auto lg:flex-row lg:flex-wrap lg:overflow-visible lg:justify-between'>
+                    <div className='w-full lg:w-[48%]'>
                         <ProductCard
                             image='/images/icecream.png'
                             title='Graphic Design'

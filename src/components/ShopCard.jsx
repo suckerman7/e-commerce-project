@@ -10,7 +10,7 @@ const ShopCard = ({
 }) => {
     return (
         <Link to={link} className="block h-full">
-            <div className='bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm font-montserrat'>
+            <div className='bg-white rounded-2xl p-4 flex items-center gap-4 shadow-sm font-montserrat'>
                 <div>
                     {badge && (
                         <p className='text-sm text-[#737373] mb-1'>
@@ -29,7 +29,7 @@ const ShopCard = ({
                     <img
                         src={image}
                         alt={title}
-                        className='h-58 w-83 object-contain'
+                        className='h-50 w-50 object-contain'
                     />
                 </div>
             </div>
