@@ -9,6 +9,7 @@ import ShopPage from "./pages/ShopPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 import TeamPage from "./pages/TeamPage";
+import AboutUsPage from "./pages/AboutUsPage";
 
 import TopBar from './components/TopBar';
 
@@ -30,6 +31,8 @@ function App() {
           <Route path='/contact' component={ContactPage} />
 
           <Route path='/team' component={TeamPage} />
+
+          <Route path='/about' component={AboutUsPage} />
 
           <Route path='/pricing'>
             <div className='p-6'>Pricing Page</div>
