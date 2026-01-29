@@ -1,4 +1,5 @@
 import {Facebook, Instagram, Twitter, Youtube, Phone, MapPin, Mail} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -13,19 +14,37 @@ const Footer = () => {
                     </p>
                 </div>
 
-                <button className='text-sm bg-[#23A6F0] font-bold text-white px-6 py-3 rounded-lg '>
-                    Contact Us
-                </button>
+                <Link to='/contact'>
+                    <button className='text-sm bg-[#23A6F0] hover:bg-[#1a78ae] hover:text-gray-300 transition-colors duration-300 font-bold text-white px-6 py-3 rounded-lg '>
+                        Contact Us
+                    </button>
+                </Link>
             </div>
 
             <div className='px-6 py-12 flex flex-col gap-10 lg:grid lg:grid-cols-5 lg:gap-8'>
                 <div>
                     <h5 className='font-bold mb-4'>Company Info</h5>
                     <ul className='flex flex-col gap-2 text-sm font-bold'>
-                        <li>About Us</li>
-                        <li>Carrier</li>
-                        <li>We are hiring</li>
-                        <li>Blog</li>
+                        <li>
+                            <Link to='/aboutus' className='hover:text-[#23A6F0] transition'>
+                                About Us
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to='/team' className='hover:text-[#23A6F0] transition'>
+                                Our Team
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to='/careers' className='hover:text-[#23A6F0] transition'>
+                                We are hiring
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to='/blog' className='hover:text-[#23A6F0] transition'>
+                                Blog
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

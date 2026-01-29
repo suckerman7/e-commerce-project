@@ -18,6 +18,7 @@ const Header = () => {
                     <Link to='/about'>About</Link>
                     <Link to='/blog'>Blog</Link>
                     <Link to='/contact'>Contact</Link>
+                    <Link to='/team'>Team</Link>
                 </nav>
 
                 <div className='hidden lg:flex items-center gap-4'>
@@ -79,6 +80,14 @@ const Header = () => {
                         className='text-3xl text-[#737373]'
                     >
                         Contact
+                    </Link>
+
+                    <Link 
+                        to='/team'
+                        onClick={() => setOpenMenu(false)}
+                        className='text-3xl text-[#737373]'
+                    >
+                        Team
                     </Link>
 
                     <span className='flex items-center gap-1 text-3xl font-bold text-[#23A6F0]'>
