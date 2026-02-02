@@ -10,6 +10,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 import TeamPage from "./pages/TeamPage";
 import AboutUsPage from "./pages/AboutUsPage";
+import SignUpPage from "./pages/SignUpPage";
 
 import TopBar from './components/TopBar';
 
@@ -34,6 +35,8 @@ function App() {
 
           <Route path='/about' component={AboutUsPage} />
 
+          <Route path='/signup' component={SignUpPage} />
+
           <Route path='/pricing'>
             <div className='p-6'>Pricing Page</div>
           </Route>
@@ -45,4 +48,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
