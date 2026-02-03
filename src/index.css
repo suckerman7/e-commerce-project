@@ -5,3 +5,17 @@
 @theme {
     --font-montserrat: "Montserrat", sans-serif;
 }
+
+@layer components {
+    .input-style {
+        @apply w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#23A6F0];
+    }
+
+    .error-text {
+        @apply text-red-500 text-xs mt-1;
+    }
+
+    .label-text {
+        @apply block text-sm font-medium mb-2;
+    }
+}

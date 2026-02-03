@@ -14,9 +14,13 @@ import SignUpPage from "./pages/SignUpPage";
 
 import TopBar from './components/TopBar';
 
+import { ToastContainer } from "react-toastify";
+
 function App() {
 
   return (
+    <>
+    <ToastContainer position="top-right" />
     <Router>
       <TopBar />
       <Header />
@@ -45,6 +49,7 @@ function App() {
 
       <Footer />
     </Router>
+    </>
   )
 }
 
