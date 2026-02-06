@@ -2,8 +2,15 @@ import {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, Menu, Heart, User } from 'lucide-react';
 
+import { useSelector, useDispatch } from 'react-redux';
+import Gravatar from 'react-gravatar';
+import { logoutUser } from "../store/client/clientThunks";
+
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
+
+    const user = useSelector(state => state.client.user);
+    const dispatch = useDispatch();
 
     return (
         <header className='bg-white shadow-sm font-montserrat'>
@@ -23,10 +30,36 @@ const Header = () => {
 
                 <div className='hidden lg:flex items-center gap-4'>
 
-                    <span className='flex items-center gap-1 text-sm font-bold text-[#23A6F0]'>
-                        <User size={16} />
-                        Login / Register
-                    </span>
+                    {user ? (
+                        <div className='flex items-center gap-2 text-sm font-bold text-[#236AF0]'>
+                            <Gravatar
+                                email={user.email || "example@example.com"}
+                                size={24}
+                                className='rounded-full'
+                            />
+                            <span>{user.name || user.email}</span>
+                            <button
+                                onClick={() => {
+                                    dispatch(logoutUser());
+                                    setOpenMenu(false);
+                                }}
+                                className='ml-2 text-xs text-red-500 hover:underline'
+                            >
+                                Logout
+                            </button>
+                        </div>
+                        ) : (
+                        <div className='flex items-center gap-2 text-sm font-bold'>
+                            <User size={16} className="text-[#23A6F0]" />
+                            <Link to="/login" className='text-[#23A6F0] hover:underline'>
+                                Login
+                            </Link>
+                            <span className="text-[#737373]">/</span>
+                            <Link to="/signup" className='text-[#23A6F0] hover:underline'>
+                                Register
+                            </Link>
+                        </div>
+                    )}
 
                     <Search className='w-4 h-4 text-[#23A6F0]'/>
                     <ShoppingCart className='w-4 h-4 text-[#23A6F0]'/>
@@ -40,11 +73,7 @@ const Header = () => {
                         aria-label="Menu"
                         className='lg:hidden'
                     >
-                        {openMenu ? (
-                            <Menu className='w-5.75 h-3.5 text-[#252B42]'/>
-                        ) : (
-                            <Menu className='w-5.75 h-3.5 text-[#252B42]'/>
-                        )}
+                        <Menu className='w-5.75 h-3.5 text-[#252B42]' />
                     </button>
             </div>
 
@@ -90,10 +119,43 @@ const Header = () => {
                         Team
                     </Link>
 
-                    <span className='flex items-center gap-1 text-3xl font-bold text-[#23A6F0]'>
-                        <User size={28} />
-                        Login / Register
-                    </span>
+                    {user ? (
+                        <div className='flex items-center gap-2 text-3xl font-bold text-[#236AF0]'>
+                            <Gravatar
+                                email={user.email || "example@example.com"}
+                                size={24}
+                                className='rounded-full'
+                            />
+                            <span>{user.name || user.email}</span>
+                            <button
+                                onClick={() => {
+                                    dispatch(logoutUser());
+                                    setOpenMenu(false);
+                                }}
+                                className='ml-2 text-sm text-red-500 hover:underline'
+                            >
+                                Logout
+                            </button>
+                        </div>
+                        ) : (
+                        <div className='flex flex-col items-center gap-2 text-3xl font-bold'>
+                            <User size={28} className="text-[#23A6F0]" />
+                            <Link
+                                to="/login"
+                                onClick={() => setOpenMenu(false)}
+                                className='text-[#23A6F0]'
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/signup"
+                                onClick={() => setOpenMenu(false)}
+                                className='text-[#23A6F0]'
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    )}
 
                     <div className='flex flex-col gap-6'>
                         <Search className='w-8.5 h-8.5 text-[#23A6F0]'/>

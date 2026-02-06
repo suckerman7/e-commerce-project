@@ -25,11 +25,17 @@ const clientReducer = createSlice({
         setLanguage(state, action) {
             state.language = action.payload;
         },
+        logout(state) {
+            state.user = null;
+            state.roles = [];
+            state.addressList = [];
+            state.creditCards = [];
+        }
     },
 });
 
 export const {
-    setUser, setRoles, setTheme, setLanguage
+    setUser, setRoles, setTheme, setLanguage, logout
 } = clientReducer.actions;
 
 export default clientReducer.reducer;

@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { autoLogin } from "./store/client/clientThunks";
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
@@ -10,6 +13,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 import TeamPage from "./pages/TeamPage";
 import AboutUsPage from "./pages/AboutUsPage";
+import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 
 import TopBar from './components/TopBar';
@@ -17,6 +21,12 @@ import TopBar from './components/TopBar';
 import { ToastContainer } from "react-toastify";
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(autoLogin());
+  }, [dispatch]);
 
   return (
     <>
@@ -38,6 +48,8 @@ function App() {
           <Route path='/team' component={TeamPage} />
 
           <Route path='/about' component={AboutUsPage} />
+
+          <Route path='/login' component={LoginPage} />
 
           <Route path='/signup' component={SignUpPage} />
 
