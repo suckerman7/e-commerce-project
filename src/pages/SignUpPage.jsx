@@ -5,6 +5,8 @@ import { useHistory } from 'react-router-dom';
 
 import { toast } from "react-toastify";
 
+import { Eye, EyeOff } from 'lucide-react';
+
 const instance = axios.create({
     baseURL: 'https://workintech-fe-ecommerce.onrender.com',
     timeout: 1000,
@@ -20,6 +22,7 @@ const SignUpPage = () => {
     const ibanRegex = /^TR\d{24}$/;
 
     const [roles, setRoles] = useState([]);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         instance.get("/roles")
@@ -31,13 +34,16 @@ const SignUpPage = () => {
         register,
         handleSubmit,
         watch,
-        formState: { errors, isSubmitting },
-        setError
+        formState: { errors, isSubmitting, isValid },
+        setError,
     } = useForm({
+        mode: "onChange",
         defaultValues: {
             role_id: 2
-        }
+        },
     });
+
+    const isDisabled = isSubmitting;
 
     const selectedRole = watch("role_id");
     const isStored = Number(selectedRole) === 3;
@@ -84,8 +90,11 @@ const SignUpPage = () => {
 
             await instance.post("/signup", payload);
 
-            toast.success("You need to click link in email to activate your account!");
-            history.goBack();
+            toast.success("You need to click link in email to activate your account!", { autoClose: 2000 });
+
+            setTimeout(() => {
+                history.push("/login");
+            })
 
         } catch (err) {
             toast.error(
@@ -110,6 +119,7 @@ const SignUpPage = () => {
                     <input
                         placeholder="Name"
                         className='input-style'
+                        disabled={isDisabled}
                         {...register("name", {
                             required: "Name is required",
                             minLength: { value: 3, message: "Min 3 characters"},
@@ -123,6 +133,7 @@ const SignUpPage = () => {
                     <input
                         placeholder="Email"
                         className='input-style'
+                        disabled={isDisabled}
                         {...register("email", {
                             required: "Email is required",
                         })} 
@@ -132,20 +143,33 @@ const SignUpPage = () => {
                     )}
 
                     <label className='label-text'>Password</label>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className='input-style'
-                        {...register("password", {
-                            required: true,
-                            pattern: {
-                                value: passwordRegex,
-                                message: "Weak password",
-                            },
-                        })} 
-                    />
 
-                    {passwordValue && (
+                    <div className='relative'>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            disabled={isDisabled}
+                            className='input-style pr-10'
+                            {...register("password", {
+                                required: true,
+                                pattern: {
+                                    value: passwordRegex,
+                                    message: "Password must be strong",
+                                },
+                            })} 
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373]"
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                    </div>
+
+                    {passwordValue && !errors.password && (
                         <div className='space-y-1'>
                             <div className='w-full h-2 bg-[#F6F6F6] rounded'>
                                 <div
@@ -166,7 +190,8 @@ const SignUpPage = () => {
                     <div className='block text-sm font-medium mb-6'>
                         <label className='label-text'>Role</label>
                         <select
-                            className='input-style' 
+                            className='input-style'
+                            disabled={isDisabled} 
                             {...register("role_id")}>
                             {roles.map(r => (
                                 <option key={r.id} value={r.id}>{r.name}</option>
@@ -175,11 +200,12 @@ const SignUpPage = () => {
                     </div>
 
                     {isStored && (
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 transition-all duration-300'>
                             <div>
                                 <label className='label-text'>Store Name</label>
                                 <input
                                     placeholder="Store Name"
+                                    disabled={isDisabled}
                                     className='input-style'
                                     {...register("store_name", {
                                         required: "Store name is required",
@@ -195,6 +221,7 @@ const SignUpPage = () => {
                                 <label className='label-text'>Store Phone Number</label>
                                 <input
                                     placeholder="Store Phone"
+                                    disabled={isDisabled}
                                     className='input-style'
                                     {...register("store_phone", {
                                         required: "Store phone is required",
@@ -213,6 +240,7 @@ const SignUpPage = () => {
                                 <label className='label-text'>Tax Number</label>
                                 <input
                                     placeholder="Tax No"
+                                    disabled={isDisabled}
                                     className='input-style'
                                     {...register("tax_no", {
                                         required: "Tax number is required",
@@ -231,6 +259,7 @@ const SignUpPage = () => {
                                 <label className='label-text'>IBAN</label>
                                 <input
                                     placeholder="IBAN"
+                                    disabled={isDisabled}
                                     className='input-style'
                                     {...register("bank_account", {
                                         required: "Bank account is required",
@@ -252,13 +281,14 @@ const SignUpPage = () => {
                     <div className='flex items-start gap-2'>
                         <input
                             type='checkbox'
+                            disabled={isDisabled}
                             {...register("terms", {
                                 required: "You must accept the terms"
                             })}
-                            className='mt-1'
+                            className='mt-1 accent-[#3E5F2C]'
                         />
                         <p className='text-sm text-[#737373]'>
-                            I agree to the <span className='underline cursor-pointer'>terms & policy conditions</span>
+                            I agree to the <span className='underline cursor-pointer text-[#236AF0]'>terms & policy conditions</span>
                         </p>
                     </div>
 
@@ -267,9 +297,12 @@ const SignUpPage = () => {
                     )}
 
                     <button 
-                        disabled={isSubmitting}
-                        className='w-full bg-[#3E5F2C] text-white py-3 rounded-lg font-semibold hover:bg-[#2F4A22] transition disabled:opacity-50'
+                        disabled={isSubmitting || !isValid}
+                        className='w-full bg-[#3E5F2C] text-white py-3 rounded-lg font-semibold hover:bg-[#2F4A22] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
                     >
+                        {isSubmitting && (
+                            <span className='w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin' />
+                        )}
                         {isSubmitting ? "Signing up..." : "Sign Up"}
                     </button>
                 </form>

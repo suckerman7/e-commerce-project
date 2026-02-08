@@ -1,8 +1,10 @@
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation, Link} from "react-router-dom";
 import { toast } from 'react-toastify';
 import Gravatar from 'react-gravatar';
+import { Eye, EyeOff } from 'lucide-react';
 
 import { loginUser } from "../store/client/clientThunks";
 
@@ -10,15 +12,27 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+    
+    const user = useSelector(state => state.client.user);
+
+    useEffect(() => {
+        if (user && location.pathname === "/login") {
+            history.replace("/");
+        }
+    }, [user, history, location.pathname]);
 
     const {
         register,
         handleSubmit,
         watch,
-        formState: { errors, isSubmitting },
-    } = useForm();
+        formState: { errors, isSubmitting, isValid },
+    } = useForm({ mode: "onChange"});
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const emailValue = watch("email");
+    const isDisabled = isSubmitting;
+    const isEmailValid = !errors.email && emailValue;
 
     const onSubmit = async (data) => {
         try {
@@ -29,11 +43,14 @@ const LoginPage = () => {
                 )
             );
 
-            toast.success("Welcome back!");
+            toast.success("Welcome back!", {
+                autoClose: 1500,
+            });
 
-            const redirectTo = location.state?.from || "/";
+            const redirectTo = location.state?.from?.pathname || "/";
 
             history.push(redirectTo);
+
         } catch (error) {
             const message = 
                 typeof error === "string"
@@ -63,6 +80,7 @@ const LoginPage = () => {
                     <input
                         placeholder="Enter your email"
                         className='input-style'
+                        disabled={isDisabled}
                         {...register("email", {
                             required: "Email is required",
                             pattern: {
@@ -81,14 +99,28 @@ const LoginPage = () => {
                             Forgot Password?
                         </span>
                     </label>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className='input-style'
-                        {...register("password", {
-                            required: "Password is required",
-                        })}
-                    />
+
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            disabled={isDisabled}
+                            className='input-style pr-10'
+                            {...register("password", {
+                                required: "Password is required",
+                            })}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(prev => !prev)}
+                            className='absolute right-3 top-1/2 -translate-y-1/2 text-[#737373]'
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                    </div>
+
                     {errors.password && (
                         <p className='error-text'>{errors.password.message}</p>
                     )}
@@ -96,6 +128,7 @@ const LoginPage = () => {
                     <div className='flex items-center gap-2'>
                         <input
                             type='checkbox'
+                            disabled={isDisabled}
                             {...register("rememberMe")}
                         />
                         <span className='text-sm text-[#737373]'>
@@ -104,16 +137,19 @@ const LoginPage = () => {
                     </div>
 
                     <button
-                        disabled={isSubmitting}
-                        className='w-full bg-[#3E5F2C] text-white py-3 rounded-lg font-semibold hover:bg-[#2F4A22] transition disabled:opacity-50'
+                        disabled={isSubmitting || !isValid}
+                        className='w-full bg-[#3E5F2C] text-white py-3 rounded-lg font-semibold hover:bg-[#2F4A22] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
                     >
+                        {isSubmitting && (
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        )}
                         {isSubmitting ? "Logging in..." : "Login"}
                     </button>
 
-                    {emailValue && (
+                    {isEmailValid && (
                         <div className='flex items-center justify-center gap-2 pt-4'>
                             <Gravatar
-                                email={emailValue}
+                                email={emailValue || "example@example.com"}
                                 size={32}
                                 className='rounded-full'
                             />
