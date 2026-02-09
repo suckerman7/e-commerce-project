@@ -2,10 +2,33 @@ import axiosInstance from "../../services/axios";
 import { setRoles, setUser, logout } from "./clientReducer";
 import {authStorage} from '../../utils/authStorage';
 
+export const verifyToken = () => async (dispatch) => {
+    const { token } = authStorage.getAuth();
+
+    if (!token) return;
+
+    try {
+        const res = await axiosInstance.get("/verify");
+
+        const { token: newToken, ...user } = res.data;
+
+        dispatch(setUser(user));
+
+        authStorage.setAuth({
+            user,
+            token: newToken,
+        });
+    } catch (err) {
+        authStorage.clearAuth();
+        dispatch(logout());
+    }
+};
+
 export const loginUser = (credentials, rememberMe) => async(dispatch) => {
     try {
         const res = await axiosInstance.post("/login", credentials);
-        const { user, token } = res.data;
+
+        const { token, ...user } = res.data;
 
         dispatch(setUser(user));
 
@@ -15,21 +38,9 @@ export const loginUser = (credentials, rememberMe) => async(dispatch) => {
 
         return user;
     } catch (err) {
-        const message = err.response?.data?.message || "Login failed";
+        const message = err.response?.data?.message || "Account not activated. Please check your email.";
 
         throw new Error(message);
-    }
-};
-
-export const autoLogin = () => (dispatch) => {
-    const { user, token } = authStorage.getAuth();
-
-    try {
-        if (user && token) {
-            dispatch(setUser((user)));
-        }
-    } catch (err) {
-        console.error("Auto login failed", err);
     }
 };
 

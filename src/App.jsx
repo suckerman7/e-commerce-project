@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { autoLogin } from "./store/client/clientThunks";
+import { verifyToken } from "./store/client/clientThunks";
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
@@ -25,7 +25,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(autoLogin());
+    dispatch(verifyToken());
   }, [dispatch]);
 
   return (

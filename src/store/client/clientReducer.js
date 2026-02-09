@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: null,
+    isAuthChecked: false,
     addressList: [],
     creditCards: [],
     roles: [],
@@ -15,6 +16,7 @@ const clientReducer = createSlice({
     reducers: {
         setUser(state, action) {
             state.user = action.payload;
+            state.isAuthChecked = true;
         },
         setRoles(state, action) {
             state.roles = action.payload;
@@ -27,6 +29,7 @@ const clientReducer = createSlice({
         },
         logout(state) {
             state.user = null;
+            state.isAuthChecked = true;
             state.roles = [];
             state.addressList = [];
             state.creditCards = [];

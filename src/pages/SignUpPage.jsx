@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from 'react-router-dom';
@@ -7,10 +6,7 @@ import { toast } from "react-toastify";
 
 import { Eye, EyeOff } from 'lucide-react';
 
-const instance = axios.create({
-    baseURL: 'https://workintech-fe-ecommerce.onrender.com',
-    timeout: 1000,
-});
+import axiosInstance from "../services/axios";
 
 const SignUpPage = () => {
 
@@ -25,7 +21,7 @@ const SignUpPage = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        instance.get("/roles")
+        axiosInstance.get("/roles")
         .then((response) => setRoles(response.data))
         .catch(() => setError("root", { message: "Roles could not be loaded." }));
     }, []);
@@ -39,13 +35,15 @@ const SignUpPage = () => {
     } = useForm({
         mode: "onChange",
         defaultValues: {
-            role_id: 2
+            role_id: 2,
+            terms: false,
         },
     });
 
     const isDisabled = isSubmitting;
 
     const selectedRole = watch("role_id");
+    const isTermsAccepted = watch("terms");
     const isStored = Number(selectedRole) === 3;
 
     const getPasswordStrength = (password = '') => {
@@ -80,6 +78,16 @@ const SignUpPage = () => {
             };
 
             if (isStored) {
+                if (
+                    !data.store_name ||
+                    !data.store_phone ||
+                    !data.tax_no ||
+                    !data.bank_account
+                ) {
+                    toast.error("Please fill all store fields");
+                    return;
+                }
+                
                 payload.store = {
                     name: data.store_name,
                     phone: data.store_phone,
@@ -88,7 +96,7 @@ const SignUpPage = () => {
                 };
             }
 
-            await instance.post("/signup", payload);
+            await axiosInstance.post("/signup", payload);
 
             toast.success("You need to click link in email to activate your account!", { autoClose: 2000 });
 
@@ -283,7 +291,7 @@ const SignUpPage = () => {
                             type='checkbox'
                             disabled={isDisabled}
                             {...register("terms", {
-                                required: "You must accept the terms"
+                                validate: v => v === true || "You must accept the terms"
                             })}
                             className='mt-1 accent-[#3E5F2C]'
                         />
@@ -297,7 +305,7 @@ const SignUpPage = () => {
                     )}
 
                     <button 
-                        disabled={isSubmitting || !isValid}
+                        disabled={isSubmitting || !isValid || !isTermsAccepted}
                         className='w-full bg-[#3E5F2C] text-white py-3 rounded-lg font-semibold hover:bg-[#2F4A22] transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
                     >
                         {isSubmitting && (
