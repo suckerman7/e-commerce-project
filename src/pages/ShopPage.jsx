@@ -7,15 +7,36 @@ import ProductCard from '../components/ProductCard';
 import ClientsSection from '../components/ClientsSection';
 import Pagination from '../components/Pagination';
 
+import { useSelector } from 'react-redux';
+import { getCategoryUrl } from '../utils/categoryHelpers';
+
 const ShopPage = () => {
+
+    const { categories, fetchState } = useSelector(
+        (state) => state.category || { categories: [], fetchState: "idle" }
+    );
+
+    const topCategories = categories
+        .sort((a,b) => b.rating - a.rating)
+        .slice(0, 5);
+
+    if (fetchState === "loading") {
+        return null;
+    }
+
     return (
         <>
             <ShopHeader />
 
             <div className='flex flex-col gap-4.75 px-4 lg:flex-row lg:gap-6 lg:px-8 lg:flex-wrap'>
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className='lg:w-[18%]'>
-                        <CategoryCard title='CLOTHS' count={5} />
+                {topCategories.map((category) => (
+                    <div key={category.id} className='lg:w-[18%]'>
+                        <CategoryCard
+                            title={category.title}
+                            image={category.img}
+                            count={5}
+                            to={getCategoryUrl(category)}
+                        />
                     </div>
                 ))}
             </div>

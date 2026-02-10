@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { verifyToken } from "./store/client/clientThunks";
+import { fetchCategories } from "./store/category/categoryThunks";
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
@@ -26,6 +27,7 @@ function App() {
 
   useEffect(() => {
     dispatch(verifyToken());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   return (
