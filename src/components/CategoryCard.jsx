@@ -10,7 +10,7 @@ const CategoryCard = ({ title, count, image, to }) => {
             className='block h-55 rounded-xl overflow-hidden font-montserrat'
         >
             <div 
-                className='h-full flex flex-col items-center justify-center text-white bg-[#8EC2F2]'
+                className=' relative h-full flex flex-col items-center justify-center text-white bg-[#8EC2F2]'
                 style={
                     image
                         ? {
@@ -22,7 +22,7 @@ const CategoryCard = ({ title, count, image, to }) => {
                 }
             >
                 {image && (
-                    <div className='absolute inset-0 bg-black/30' />
+                    <div className='absolute inset-0 bg-black/30 pointer-events-none' />
                 )}
                 <div className='relative z-10 text-center'>
                     <h3 className='text-base font-bold'>{title}</h3>

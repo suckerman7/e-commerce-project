@@ -17,6 +17,7 @@ const ShopPage = () => {
     );
 
     const topCategories = categories
+        .slice()
         .sort((a,b) => b.rating - a.rating)
         .slice(0, 5);
 
