@@ -7,14 +7,26 @@ import ProductCard from '../components/ProductCard';
 import ClientsSection from '../components/ClientsSection';
 import Pagination from '../components/Pagination';
 
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { getCategoryUrl } from '../utils/categoryHelpers';
+import { fetchProducts } from '../store/product/productThunks';
 
 const ShopPage = () => {
+
+    const dispatch = useDispatch();
 
     const { categories, fetchState } = useSelector(
         (state) => state.category || { categories: [], fetchState: "idle" }
     );
+
+    const { productList, fetchState: productFetchState, } = useSelector(
+        (state) => state.product || initialState
+    );
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
 
     const topCategories = categories
         .slice()
@@ -45,21 +57,27 @@ const ShopPage = () => {
             <ShopToolbar />
 
             <div className='grid grid-cols-2 gap-4 px-4 mt-8 lg:grid-cols-3 lg:px-8'>
-                {Array.from({ length: 12 }).map((_, i) => (
-                    <div key={i} className={i >= 4 ? 'hidden lg:block' : ''}>
-                        <ProductCard
-                            key={i}
-                            variant="popular"
-                            image="/images/cashews.png"
-                            title="Graphic Design"
-                            department="English Department"
-                            oldPrice="16.48"
-                            price="6.48"
-                            sales={15}
-                            colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
-                        />
+                {productFetchState === "FETCHING" && (
+                    <div className='col-span-full flex justify-center py-16'>
+                        <div className='w-10 h-10 border-4 border-gray-200 border-t-[#236AF0] rounded-full animate-spin' />
                     </div>
-                ))}
+                )}
+
+                {productFetchState === "FETCHED" && 
+                    productList.map((product, i) => (
+                        <div key={product.id} className={i >= 4 ? 'hidden lg:block' : ''}>
+                            <ProductCard
+                                variant="popular"
+                                image={product.images?.[0]?.url}
+                                title={product.name}
+                                department={product.category?.title || ""}
+                                oldPrice={product.old_price}
+                                price={product.price}
+                                sales={product.sell_count}
+                                colors={product.colors || []}
+                            />
+                        </div>
+                    ))}
             </div>
 
             <Pagination />
