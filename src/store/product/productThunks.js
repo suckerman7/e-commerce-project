@@ -6,15 +6,18 @@ export const fetchProducts = () => async (dispatch, getState) => {
     
     try {
 
-        const { limit, offset, filter } = getState().product;
+        const { limit, offset, categoryId, sort, filter, } = getState().product;
 
-        const response = await axiosInstance.get("/products", {
-            params: {
-                limit,
-                offset,
-                filter,
-            },
-        });
+        const params = {
+            limit,
+            offset,
+        };
+
+        if (categoryId) params.category = categoryId;
+        if (sort) params.sort = sort;
+        if (filter) params.filter = filter;
+
+        const response = await axiosInstance.get("/products", { params });
 
         const { products, total } = response.data;
 

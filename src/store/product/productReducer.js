@@ -5,7 +5,11 @@ const initialState = {
     total: 0,
     limit: 25,
     offset: 0,
+
+    categoryId: null,
+    sort: "",
     filter: "",
+
     fetchState: "NOT_FETCHED", // NOT_FETCHED | FETCHING | FETCHED | FAILED
 };
 
@@ -28,14 +32,23 @@ const productReducer = createSlice({
         setOffset(state, action) {
             state.offset = action.payload;
         },
+        setCategoryId(state, action) {
+            state.categoryId = action.payload;
+            state.offset = 0;
+        },
+        setSort(state, action) {
+            state.sort = action.payload;
+            state.offset = 0;
+        },
         setFilter(state, action) {
             state.filter = action.payload;
+            state.offset = 0;
         },
     },
 });
 
 export const {
-    setProductList, setTotal, setFetchState, setLimit, setOffset, setFilter
+    setProductList, setTotal, setFetchState, setLimit, setOffset, setCategoryId, setSort, setFilter
 } = productReducer.actions;
 
 export default productReducer.reducer;

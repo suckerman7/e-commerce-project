@@ -11,10 +11,16 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCategoryUrl } from '../utils/categoryHelpers';
 import { fetchProducts } from '../store/product/productThunks';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
+import { setCategoryId, setSort, setFilter } from '../store/product/productReducer';
 
 const ShopPage = () => {
 
     const dispatch = useDispatch();
+    const { categoryId } = useParams();
+
+    const location = useLocation();
+    const history = useHistory();
 
     const { categories, fetchState } = useSelector(
         (state) => state.category || { categories: [], fetchState: "idle" }
@@ -24,9 +30,40 @@ const ShopPage = () => {
         (state) => state.product || initialState
     );
 
+    const { categoryId: cat, sort, filter, offset } = useSelector(
+        (state) => state.product
+    );
+
+    useEffect(() => {
+        dispatch(setCategoryId(categoryId ? Number(categoryId) : null));
+    }, [categoryId, dispatch]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+
+        const urlSort = params.get("sort");
+        const urlFilter = params.get("filter");
+
+        if (urlSort !== sort) dispatch(setSort(urlSort || ""));
+        if (urlFilter !== filter) dispatch(setFilter(urlFilter || ""));
+    }, [location.search, dispatch]);
+
+    useEffect(() => {
+        const params = new URLSearchParams();
+
+        if (sort) params.set("sort", sort);
+        if (filter) params.set("filter", filter);
+
+        history.replace({
+            pathname: location.pathname,
+            search: params.toString(),
+        });
+    }, [sort, filter, history, location.pathname]);
+
     useEffect(() => {
         dispatch(fetchProducts());
-    }, [dispatch]);
+    }, [cat, sort, filter, offset, dispatch]);
+
 
     const topCategories = categories
         .slice()

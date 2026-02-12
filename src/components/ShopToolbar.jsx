@@ -1,11 +1,30 @@
 import { LayoutGrid, List } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSort, setFilter } from '../store/product/productReducer';
+
+import { useState, useEffect } from 'react';
 
 const ShopToolbar = () => {
 
-    const { total, productList, fetchState, offset, limit } = useSelector(
+    const dispatch = useDispatch();
+
+    const { total, productList, fetchState, offset, sort, filter } = useSelector(
         (state) => state.product
     )
+
+    const [inputValue, setInputValue] = useState(filter || "");
+
+    useEffect(() => {
+        setInputValue(filter || "");
+    }, [filter]);
+    
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            dispatch(setFilter(inputValue));
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [inputValue])
 
     const start = total > 0 ? offset + 1 : 0;
     const end = offset + productList.length;
@@ -30,10 +49,25 @@ const ShopToolbar = () => {
             </div>
 
             <div className='flex gap-4 justify-center lg:justify-end lg:w-1/3'>
-                <select className='border border-[#DDDDDD] text-[#737373] rounded px-3 py-2 text-sm'>
-                    <option>Popularity</option>
-                    <option>Price: Ascending</option>
-                    <option>Price: Descending</option>
+
+                <input
+                    type="text"
+                    placeholder="Search for product..."
+                    value={inputValue}
+                    onChange={(e) => dispatch(setInputValue(e.target.value))}
+                    className='border border-[#DDDDDD] rounded px-3 py-2 text-sm'
+                />
+
+                <select
+                    value={sort}
+                    onChange={(e) => dispatch(setSort(e.target.value))}
+                    className='border border-[#DDDDDD] text-[#737373] rounded px-3 py-2 text-sm'
+                >
+                    <option value="">Sort with...</option>
+                    <option value="price:asc">Price: Low to High</option>
+                    <option value="price:desc">Price: High to Low</option>
+                    <option value="rating:asc">Rating: Low to High</option>
+                    <option value="rating:desc">Rating: High to Low</option>
                 </select>
 
                 <button className='bg-[#23A6F0] text-white px-4 py-2 rounded text-sm font-bold'>
