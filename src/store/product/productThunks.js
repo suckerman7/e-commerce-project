@@ -1,5 +1,5 @@
 import axiosInstance from "../../services/axios";
-import { setProductList, setTotal, setFetchState } from './productReducer';
+import { setProductList, setTotal, setFetchState, setDetailFetchState, setSelectedProduct } from './productReducer';
 
 export const fetchProducts = () => async (dispatch, getState) => {
     dispatch(setFetchState("FETCHING"));
@@ -27,5 +27,18 @@ export const fetchProducts = () => async (dispatch, getState) => {
     } catch (err) {
         console.error("Product fetching error", err);
         dispatch(setFetchState("FAILED"));
+    }
+};
+
+export const fetchProductById = (productId) => async (dispatch) => {
+    dispatch(setDetailFetchState("FETCHING"));
+
+    try {
+        const response = await axiosInstance.get(`/products/${productId}`);
+        dispatch(setSelectedProduct(response.data));
+        dispatch(setDetailFetchState("FETCHED"));
+    } catch (err) {
+        console.error("Product detail fetching error", err);
+        dispatch(setDetailFetchState("FAILED"));
     }
 };

@@ -43,7 +43,7 @@ function App() {
 
           <Route path='/shop/:gender?/:title?/:categoryId?' component={ShopPage} />
 
-          <Route path='/productdetail' component={ProductDetailPage} />
+          <Route path='/shop/:gender/:categoryName/:categoryId/:productSlug/:productId' component={ProductDetailPage} />
 
           <Route path='/contact' component={ContactPage} />
 

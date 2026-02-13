@@ -14,7 +14,7 @@ const ProductCard = ({
     link = '/productdetail'
 }) => {
 
-    const baseClass = 'bg-white rounded-2xl shadow-sm p-4 w-full';
+    const baseClass = 'bg-white rounded-2xl shadow-sm p-4 w-full ';
 
     const variantClasses = {
         default: "",

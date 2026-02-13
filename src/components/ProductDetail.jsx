@@ -1,25 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RatingStars from './RatingStars';
 import ProductSlider from "./ProductSlider";
 import { Heart, ShoppingCart, Eye} from 'lucide-react';
 
-const sliderImages = [
-    {
-        image: "/images/product-slider-1.jpg"
-    },
-    {
-        image: "/images/product-slider-2.jpg"
-    },
-]
+import { useParams, useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductById } from "../store/product/productThunks";
+
+const sliderImages = selectedProduct.images || [];
 
 const ProductDetail = () => {
 
     const [currentImage, setCurrentImage] = useState(0);
     const [rating, setRating] = useState(4);
 
+    const { productId } = useParams();
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const { selectedProduct, detailFetchState, clearSelectedProduct } = useSelector(
+        state => state.product
+    )
+
+    useEffect(() => {
+        dispatch(fetchProductById(productId));
+
+        return () => {
+            dispatch(clearSelectedProduct());
+        }
+    }, [productId, dispatch])
+
+    if (detailFetchState === "FETCHING") {
+        return (
+            <div className='flex justify-center py-24'>
+                <div className='w-12 h-12 border-4 border-gray-200 border-t-[#236AF0] rounded-full animate-spin' />
+            </div>
+        );
+    }
+
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
             <div className='flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:gap-12'>
+
+                <button
+                    onClick={() => history.goBack()}
+                    className='text-sm font-bold text-[#236AF0] mb-4'
+
+                >
+                    ← Back
+                </button>
 
                 <div>
                     <ProductSlider
@@ -47,7 +76,7 @@ const ProductDetail = () => {
 
                 <div>
                     <h2 className='text-xl font-bold text-[#252B42]'>
-                        Floating Phone
+                        {selectedProduct.name}
                     </h2>
 
                     <div className='flex items-center gap-2 mt-2'>
@@ -62,17 +91,18 @@ const ProductDetail = () => {
                     </div>
 
                     <p className='text-2xl font-bold text-[#252B42] mt-4'>
-                        $1,139.33
+                        ${selectedProduct.price}
                     </p>
 
                     <p className='text-sm mt-3'>
                         Availability : 
-                        <span className='text-[#23A6F0] font-bold'> In Stock</span>
+                        <span className='text-[#23A6F0] font-bold'> 
+                            {selectedProduct.stock > 0 ? " In Stock " : "Out of Stock"}
+                        </span>
                     </p>
 
                     <p className='text-sm text-[#737373] mt-4 leading-relaxed'>
-                        Met minim Mollie non desert Alamo est sit cliquey dolor
-                        do met sent. RELIT official consequent door ENIM RELIT Mollie.
+                        {selectedProduct.description}
                     </p>
 
                     <div className="w-full h-px bg-[#BDBDBD] my-6" />
