@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getCategoryUrl } from '../utils/categoryHelpers';
 import { fetchProducts } from '../store/product/productThunks';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { setCategoryId, setSort, setFilter } from '../store/product/productReducer';
+import { setCategoryId, setSort, setFilter, setOffset, setLimit } from '../store/product/productReducer';
 
 const ShopPage = () => {
 
@@ -30,7 +30,7 @@ const ShopPage = () => {
         (state) => state.product || initialState
     );
 
-    const { categoryId: cat, sort, filter, offset } = useSelector(
+    const { categoryId: cat, sort, filter, offset, limit } = useSelector(
         (state) => state.product
     );
 
@@ -41,28 +41,48 @@ const ShopPage = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
 
-        const urlSort = params.get("sort");
-        const urlFilter = params.get("filter");
+        const urlSort = params.get("sort") || "";
+        const urlFilter = params.get("filter") || "";
+        const urlLimit = params.get("limit");
+        const urlOffset = params.get("offset");
 
-        if (urlSort !== sort) dispatch(setSort(urlSort || ""));
-        if (urlFilter !== filter) dispatch(setFilter(urlFilter || ""));
-    }, [location.search, dispatch]);
+        if (urlSort !== sort) dispatch(setSort(urlSort));
+        if (urlFilter !== filter) dispatch(setFilter(urlFilter));
+
+        if (urlLimit !== null && Number(urlLimit) !== limit)
+            dispatch(setLimit(Number(urlLimit)));
+
+        if (urlOffset !== null && Number(urlOffset) !== offset)
+            dispatch(setOffset(Number(urlOffset)));
+
+    }, [location.search]);
 
     useEffect(() => {
-        const params = new URLSearchParams();
+        const params = new URLSearchParams(location.search);
+
+        params.set("limit", limit);
+        params.set("offset", offset);
 
         if (sort) params.set("sort", sort);
+        else params.delete("sort");
+
         if (filter) params.set("filter", filter);
+        else params.delete("filter");
 
         history.replace({
             pathname: location.pathname,
             search: params.toString(),
         });
-    }, [sort, filter, history, location.pathname]);
+    }, [sort, filter, limit, offset]);
+
+
+    useEffect(() => {
+        dispatch(setOffset(0));
+    }, [cat, sort, filter])
 
     useEffect(() => {
         dispatch(fetchProducts());
-    }, [cat, sort, filter, offset, dispatch]);
+    }, [cat, sort, filter, offset, limit, dispatch]);
 
 
     const topCategories = categories
@@ -114,7 +134,13 @@ const ShopPage = () => {
                                 colors={product.colors || []}
                             />
                         </div>
-                    ))}
+                ))}
+
+                {productFetchState === "FETCHED" && productList.length === 0 && (
+                    <div className="col-span-full text-center py-16 text-gray-500">
+                        No products found in this category.
+                    </div>
+                )}
             </div>
 
             <Pagination />

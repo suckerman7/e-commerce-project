@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { setOffset } from "../store/product/productReducer";
-import { fetchProducts } from "../store/product/productThunks";
 
 const Pagination = () => {
 
@@ -27,7 +26,6 @@ const Pagination = () => {
     const handlePageChange = (page) => {
         const newOffset = (page - 1) * limit;
         dispatch(setOffset(newOffset));
-        dispatch(fetchProducts());
         window.scrollTo({ top: 0, behavior: "smooth"});
     };
 
