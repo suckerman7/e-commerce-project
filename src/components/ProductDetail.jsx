@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProductById } from "../store/product/productThunks";
 import { clearSelectedProduct } from "../store/product/productReducer";
 
+import ProductDetailHeader from '../components/ProductDetailHeader';
+import ProductTabs from '../components/ProductTabs';
+import DetailsBestseller from '../components/DetailsBestseller';
+
 const slugify = (text) =>
     text
         ?.toLowerCase()
@@ -67,13 +71,7 @@ const ProductDetail = () => {
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
 
-            <button
-                onClick={() => history.goBack()}
-                className='text-sm font-bold text-[#236AF0] mb-4'
-
-            >
-                ← Back
-            </button>
+            <ProductDetailHeader product={selectedProduct} category={productCategory}/>
 
             <div className='flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:gap-12'>
 
@@ -113,7 +111,7 @@ const ProductDetail = () => {
                             size={18}
                         />
                         <span className='text-sm font-bold text-[#737373]'>
-                            {ratingValue.toFixed(1)} / 5 . 10 Reviews
+                            {ratingValue.toFixed(1)} / 5
                         </span>
                     </div>
 
@@ -160,6 +158,10 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
+
+            <ProductTabs product={selectedProduct}/>
+
+            <DetailsBestseller currentProduct={selectedProduct} />
         </section>
     );
 };

@@ -1,21 +1,26 @@
 import React from 'react';
 
-import ProductDetailHeader from '../components/ProductDetailHeader';
 import ClientsSection from '../components/ClientsSection';
 import ProductDetail from '../components/ProductDetail';
-import ProductTabs from '../components/ProductTabs';
-import DetailsBestseller from '../components/DetailsBestseller';
+
+import { useHistory } from "react-router-dom";
 
 const ProductDetailPage = () => {
+
+    const history = useHistory();
+
     return (
         <>
-            <ProductDetailHeader />
+
+            <button
+                onClick={() => history.goBack()}
+                className='text-sm font-bold text-[#236AF0] mb-4'
+
+            >
+                ← Back
+            </button>
 
             <ProductDetail />
-
-            <ProductTabs />
-
-            <DetailsBestseller />
 
             <ClientsSection />
         </>

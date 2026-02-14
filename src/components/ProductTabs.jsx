@@ -1,15 +1,24 @@
 import {useState} from 'react';
 import { ChevronRight } from "lucide-react";
 
-const tabs = [
-    { id: "description", label: "Description" },
-    { id: "addinfo", label: "Additional Information" },
-    { id: "review", label: "Reviews (0)" },
-]
-
-const ProductTabs = () => {
+const ProductTabs = ({ product }) => {
 
     const [activeTab, setActiveTab] = useState("description");
+
+    if (!product) return null;
+
+    const {
+        description,
+        images = [],
+    } = product;
+
+    const mainImage = images[0]?.url;
+
+    const tabs = [
+        { id: "description", label: "Description" },
+        { id: "addinfo", label: "Additional Information" },
+        { id: "review", label: "Reviews (0)" },
+    ];
 
     return (
         <section className='mt-12 font-montserrat'>
@@ -35,27 +44,19 @@ const ProductTabs = () => {
 
                         <div className='lg:w-3/5'>
                             <img
-                                src="/images/product-description.png"
-                                alt=""
+                                src={mainImage}
+                                alt={product.name}
                                 className='rounded-xl w-full object-cover'
                             />
                         </div>
 
                         <div className='lg:w-2/5'>
                             <h3 className='font-bold text-2xl text-[#252B42] mb-4'>
-                                the quick fox jumps over
+                                Product Description
                             </h3>
 
-                            <p className='text-sm text-[#737373] leading-relaxed mb-4'>
-                                Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                            </p>
-
-                            <p className='text-sm text-[#737373] leading-relaxed mb-4'>
-                                Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
-                            </p>
-
-                            <p className='text-sm text-[#737373] leading-relaxed'>
-                                Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent door ENIM RELIT Mollie. Excitation venial consequent sent nostrum met.
+                            <p className='text-sm text-[#737373] leading-relaxed mb-4 whitespace-pre-line'>
+                                {description || "No description available."}
                             </p>
                         </div>
                     </div>
@@ -64,44 +65,21 @@ const ProductTabs = () => {
                 {activeTab === "addinfo" && (
                     <div className='space-y-4 lg:items-center'>
                         <h3 className='font-bold text-2xl text-[#252B42]'>
-                            the quick fox jumps over
+                            Additional Information
                         </h3>
 
                         <ul className='font-bold space-y-2 text-sm text-[#737373]'>
                             <li className='flex items-center gap-2'>
                                 <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
+                                <span>Stock: {product.stock}</span>
                             </li>
                             <li className='flex items-center gap-2'>
                                 <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
+                                <span>Rating: {product.rating}</span>
                             </li>
                             <li className='flex items-center gap-2'>
                                 <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
-                            </li>
-                            <li className='flex items-center gap-2'>
-                                <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
-                            </li>
-                        </ul>
-
-                        <h3 className='font-bold text-2xl text-[#252B42]'>
-                            the quick fox jumps over
-                        </h3>
-
-                        <ul className='font-bold space-y-2 text-sm text-[#737373]'>
-                           <li className='flex items-center gap-2'>
-                                <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
-                            </li>
-                            <li className='flex items-center gap-2'>
-                                <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
-                            </li>
-                            <li className='flex items-center gap-2'>
-                                <ChevronRight size={20}/> 
-                                <span>the quick fox jumps over the lazy dog</span>
+                                <span>Sold: {product.sell_count}</span>
                             </li>
                         </ul>
                     </div>
