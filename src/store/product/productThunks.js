@@ -1,5 +1,5 @@
 import axiosInstance from "../../services/axios";
-import { setProductList, setTotal, setFetchState, setDetailFetchState, setSelectedProduct } from './productReducer';
+import { setProductList, setTotal, setFetchState, setDetailFetchState, setSelectedProduct, clearSelectedProduct } from './productReducer';
 
 export const fetchProducts = () => async (dispatch, getState) => {
     dispatch(setFetchState("FETCHING"));

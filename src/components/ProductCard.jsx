@@ -3,18 +3,29 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 const ProductCard = ({
-    image,
-    title,
-    department,
-    price,
-    oldPrice,
-    variant = 'default',
-    sales,
-    colors = [],
-    link = '/productdetail'
+    product,
+    variant = "default",
 }) => {
 
-    const baseClass = 'bg-white rounded-2xl shadow-sm p-4 w-full ';
+    if (!product) return null;
+
+    const {
+        id,
+        name,
+        price,
+        old_price,
+        sell_count,
+        images,
+        colors = [],
+        category
+    } = product;
+
+    const image = images?.[0]?.url;
+    const department = category?.title;
+
+    const productUrl = `/product/${id}`;
+
+    const baseClass = 'bg-white rounded-2xl shadow-sm p-4 w-full';
 
     const variantClasses = {
         default: "",
@@ -23,19 +34,19 @@ const ProductCard = ({
     };
 
     return (
-        <Link to={link} className="block h-full">
+        <Link to={productUrl} className="block h-full cursor-pointer hover:shadow-lg transition">
             <div className={`${baseClass} ${variantClasses[variant]}`}>
                 <div className="flex justify-center mb-4">
                     <img
                         src={image}
-                        alt={title}
+                        alt={name}
                         className='h-40 object-contain'
                     />
                 </div>
 
                 <div className="text-center">
                     <h3 className='font-bold text-[#252B42]'>
-                        {title}
+                        {name}
                     </h3>
 
                     {department && (
@@ -44,17 +55,17 @@ const ProductCard = ({
                         </p>
                     )}
 
-                    {variant === "popular" && sales && (
+                    {variant === "popular" && sell_count && (
                         <div className='flex items-center justify-center gap-1 text-sm text-[#737373] font-bold mt-2'>
                             <Download size={16} />
-                            <span>{sales} Sales</span>
+                            <span>{sell_count} Sales</span>
                         </div>
                     )}
 
                     <div className="flex justify-center items-center gap-2 mt-2">
-                        {oldPrice && (
+                        {old_price && (
                             <h5 className='text-[#BDBDBD] line-through'>
-                                ${oldPrice}
+                                ${old_price}
                             </h5>
                         )}
                         <h5 className='text-[#23856D] font-bold'>

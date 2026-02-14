@@ -124,14 +124,8 @@ const ShopPage = () => {
                     productList.map((product, i) => (
                         <div key={product.id} className={i >= 4 ? 'hidden lg:block' : ''}>
                             <ProductCard
+                                product={product}
                                 variant="popular"
-                                image={product.images?.[0]?.url}
-                                title={product.name}
-                                department={product.category?.title || ""}
-                                oldPrice={product.old_price}
-                                price={product.price}
-                                sales={product.sell_count}
-                                colors={product.colors || []}
                             />
                         </div>
                 ))}

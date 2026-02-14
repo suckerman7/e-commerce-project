@@ -6,21 +6,30 @@ import { Heart, ShoppingCart, Eye} from 'lucide-react';
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductById } from "../store/product/productThunks";
+import { clearSelectedProduct } from "../store/product/productReducer";
 
-const sliderImages = selectedProduct.images || [];
+const slugify = (text) =>
+    text
+        ?.toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-");
 
 const ProductDetail = () => {
 
     const [currentImage, setCurrentImage] = useState(0);
-    const [rating, setRating] = useState(4);
 
     const { productId } = useParams();
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const { selectedProduct, detailFetchState, clearSelectedProduct } = useSelector(
+    const { selectedProduct, detailFetchState } = useSelector(
         state => state.product
     )
+
+    const categories = useSelector(state => state.category.categories);
+    const productCategory = selectedProduct
+        ? categories.find(c => c.id === selectedProduct.category_id)
+        : null;
 
     useEffect(() => {
         dispatch(fetchProductById(productId));
@@ -30,7 +39,20 @@ const ProductDetail = () => {
         }
     }, [productId, dispatch])
 
-    if (detailFetchState === "FETCHING") {
+    useEffect(() => {
+        if (!selectedProduct || !productCategory) return;
+
+        const seoUrl = `/shop/${productCategory.gender}/${slugify(productCategory.title)}/${productCategory.id}/${slugify(selectedProduct.name)}/${selectedProduct.id}`;
+
+        history.replace(seoUrl);
+
+    }, [selectedProduct, productCategory, history])
+
+    useEffect(() => {
+        setCurrentImage(0);
+    }, [selectedProduct]);
+
+    if (detailFetchState === "FETCHING" || !selectedProduct) {
         return (
             <div className='flex justify-center py-24'>
                 <div className='w-12 h-12 border-4 border-gray-200 border-t-[#236AF0] rounded-full animate-spin' />
@@ -38,34 +60,40 @@ const ProductDetail = () => {
         );
     }
 
+    const sliderImages = selectedProduct.images || [];
+
+    const ratingValue = Number(selectedProduct.rating) || 0;
+
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
+
+            <button
+                onClick={() => history.goBack()}
+                className='text-sm font-bold text-[#236AF0] mb-4'
+
+            >
+                ← Back
+            </button>
+
             <div className='flex flex-col gap-10 lg:grid lg:grid-cols-2 lg:gap-12'>
-
-                <button
-                    onClick={() => history.goBack()}
-                    className='text-sm font-bold text-[#236AF0] mb-4'
-
-                >
-                    ← Back
-                </button>
 
                 <div>
                     <ProductSlider
+                        images={sliderImages}
                         currentImage={currentImage} 
                         setCurrentImage={setCurrentImage}
                     />
 
-                    <div className='flex gap-4 mt-4 justify-center lg:justify-start'>
+                    <div className='flex gap-3 mt-4 justify-center lg:justify-start'>
                         {sliderImages.map((item, index) => (
-                            <button key={index} onClick={() => setCurrentImage(index)} className={`w-20 h-20 rounded-xl overflow-hidden border-2 ${
+                            <button key={index} onClick={() => setCurrentImage(index)} className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition ${
                                 index === currentImage
                                 ? 'border-[#23A6F0]'
-                                : 'border-transparent'
+                                : 'border-gray-200'
                             }`}
                             >
                                 <img
-                                    src={item.image}
+                                    src={item.url}
                                     alt=""
                                     className='w-full h-full object-cover'
                                 />
@@ -81,12 +109,11 @@ const ProductDetail = () => {
 
                     <div className='flex items-center gap-2 mt-2'>
                         <RatingStars
-                            value={rating}
-                            onChange={setRating}
+                            value={ratingValue}
                             size={18}
                         />
                         <span className='text-sm font-bold text-[#737373]'>
-                            {rating} / 5 . 10 Reviews
+                            {ratingValue.toFixed(1)} / 5 . 10 Reviews
                         </span>
                     </div>
 
