@@ -16,6 +16,7 @@ import TeamPage from "./pages/TeamPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage";
 
 import TopBar from './components/TopBar';
 
@@ -57,9 +58,7 @@ function App() {
 
           <Route path='/signup' component={SignUpPage} />
 
-          <Route path='/pricing'>
-            <div className='p-6'>Pricing Page</div>
-          </Route>
+          <Route path='/cart' component={ShoppingCartPage} />
         </Switch>
       </PageContent>
 

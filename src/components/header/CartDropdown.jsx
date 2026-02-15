@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { removeFromCart } from '../../store/cart/cartReducer';
+import { Link } from 'react-router-dom';
 
 const cartDropdown = ({ cart, totalCount, isMobile = false}) => {
     const dispatch = useDispatch();
@@ -54,6 +55,21 @@ const cartDropdown = ({ cart, totalCount, isMobile = false}) => {
                                 </button>
                             </div>
                         ))}
+                    </div>
+
+                    <div className='mt-4 flex gap-2'>
+                        <Link
+                            to="/cart"
+                            className='flex-1 text-center border border-[#236AF0] text-[#236AF0] py-2 rounded-lg text-sm font-semibold'
+                        >
+                            View Cart
+                        </Link>
+
+                        <button
+                            className='flex-1 bg-[#236AF0] text-white py-2 rounded-lg text-sm font-semibold'
+                        >
+                            Checkout
+                        </button>
                     </div>
                 </>
             )}

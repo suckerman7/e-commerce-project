@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { loadCartFromStorage } from '../../utils/cartStorage';
 
 const initialState = {
-    cart: [],
+    cart: loadCartFromStorage(),
     payment: null,
     address: null,
 };
@@ -64,6 +65,12 @@ const cartReducer = createSlice({
             }
         },
 
+        toggleAllChecked(state, action) {
+            state.cart.forEach(item => {
+                item.checked = action.payload;
+            });
+        },
+
         clearCart(state) {
             state.cart = [];
         },
@@ -79,7 +86,7 @@ const cartReducer = createSlice({
 });
 
 export const {
-    addToCart, removeFromCart, increaseCount, decreaseCount, toggleChecked, clearCart, setPayment, setAddress
+    addToCart, removeFromCart, increaseCount, decreaseCount, toggleChecked, toggleAllChecked, clearCart, setPayment, setAddress
 } = cartReducer.actions;
 
 export default cartReducer.reducer;
