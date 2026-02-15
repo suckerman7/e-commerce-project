@@ -12,6 +12,8 @@ import ProductDetailHeader from '../components/ProductDetailHeader';
 import ProductTabs from '../components/ProductTabs';
 import DetailsBestseller from '../components/DetailsBestseller';
 
+import { addToCart } from "../store/cart/cartReducer";
+
 const slugify = (text) =>
     text
         ?.toLowerCase()
@@ -67,6 +69,10 @@ const ProductDetail = () => {
     const sliderImages = selectedProduct.images || [];
 
     const ratingValue = Number(selectedProduct.rating) || 0;
+
+    const handleCartAdd = () => {
+        dispatch(addToCart(selectedProduct));
+    };
 
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
@@ -140,16 +146,12 @@ const ProductDetail = () => {
                     </div>
 
                     <div className='flex items-center gap-4 mt-10'>
-                        <button className='bg-[#23A6F0] text-white px-6 py-3 rounded-lg text-sm font-bold'>
-                            Select Options
+                        <button onClick={handleCartAdd} className='bg-[#23A6F0] text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-[#1873a7]'>
+                            <ShoppingCart size={18} /> Add to Cart
                         </button>
 
                         <button className='w-10 h-10 border rounded-full flex items-center justify-center'>
                             <Heart size={18} />
-                        </button>
-
-                        <button className='w-10 h-10 border rounded-full flex items-center justify-center'>
-                            <ShoppingCart size={18} />
                         </button>
 
                         <button className='w-10 h-10 border rounded-full flex items-center justify-center'>

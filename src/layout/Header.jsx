@@ -2,11 +2,12 @@ import {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, Menu, Heart, ChevronUp, ChevronDown} from 'lucide-react';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getCategoryUrl } from '../utils/categoryHelpers';
 
 import HeaderAuth from '../components/header/HeaderAuth';
 import ShopDropdown from '../components/header/ShopDropdown';
+import CartDropdown from '../components/header/CartDropdown';
 
 const NAV_LINKS = [
     {to: "/", label: "Home" },
@@ -20,10 +21,25 @@ const NAV_LINKS = [
 const Header = () => {
     const [openMenu, setOpenMenu] = useState(false);
     const [openShop, setOpenShop] = useState(false);
+    const [openCart, setOpenCart] = useState(false);
 
     const user = useSelector(state => state.client.user);
 
+    const dispatch = useDispatch();
+
     const categories = useSelector(state => state.category?.categories || []);
+
+    const cart = useSelector(state => state.cart.cart);
+
+    const totalCount = cart.reduce(
+        (sum, item) => sum + item.count,
+        0
+    );
+
+    const totalPrice = cart.reduce(
+        (acc, item) => acc + item.product.price * item.count,
+        0
+    );
 
     const womenCategories = categories.filter(c => c.gender === "k");
     const menCategories = categories.filter(c => c.gender === "e");
@@ -60,7 +76,28 @@ const Header = () => {
                     <HeaderAuth user={user} size="sm"/>
 
                     <Search className='w-4 h-4 text-[#23A6F0]'/>
-                    <ShoppingCart className='w-4 h-4 text-[#23A6F0]'/>
+
+                    <div className='relative'>
+                        <div
+                            onClick={() => setOpenCart(prev => !prev)}
+                            className='cursor-pointer relative'
+                        >
+                            <ShoppingCart className='w-4 h-4 text-[#23A6F0]'/>
+
+                            <span className="absolute -top-2 -right-2 bg-[#ea7907] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                {totalCount}
+                            </span>
+
+                        </div>
+
+                        {openCart && (
+                            <CartDropdown
+                                cart={cart}
+                                totalCount={totalCount}
+                            />
+                        )}
+                    </div>
+
                     <Heart className='w-4 h-4 text-[#23A6F0]' />
                 </div>
 
@@ -146,13 +183,36 @@ const Header = () => {
 
                     <div className='flex flex-col gap-6'>
                         <Search className='w-8.5 h-8.5 text-[#23A6F0]'/>
-                        <ShoppingCart className='w-8.5 h-8.5 text-[#23A6F0]'/>
+                        <div className='relative'>
+                            <div
+                                onClick={() => setOpenCart(prev => !prev)}
+                                className='cursor-pointer relative'
+                            >
+                                <ShoppingCart className='w-8.5 h-8.5 text-[#23A6F0]'/>
+                                
+                                <span className="absolute -top-2 -right-2 bg-[#ea7907] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                    {totalCount}
+                                </span>
+                            </div>
+
+                            {openCart && (
+                                <>
+                                    <div className='fixed inset-0 bg-black/30 z-40' />
+                                    <CartDropdown
+                                        cart={cart}
+                                        totalCount={totalCount}
+                                        isMobile
+                                    />
+                                </>
+                            )}
+                        </div>
                         <Heart className='w-8.5 h-8.5 text-[#23A6F0]' />
                     </div>
                 </nav>
             )}
         </header>
     );
+
 };
 
 export default Header;
