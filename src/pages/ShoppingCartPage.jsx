@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { 
     removeFromCart, 
     increaseCount, 
@@ -10,6 +11,7 @@ import {
 const ShoppingCartPage = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const cart = useSelector(
         state => state.cart.cart
@@ -24,6 +26,8 @@ const ShoppingCartPage = () => {
     const totalCount = cart.reduce((acc, item) => acc + item.count, 0);
 
     const selectedItems = cart.filter(item => item.checked)
+
+    const hasSelectedItem = selectedItems.length > 0;
 
     const productTotal = selectedItems.reduce(
         (acc, item) => acc + item.product.price * item.count, 0
@@ -44,18 +48,23 @@ const ShoppingCartPage = () => {
     if (cart.length === 0) {
         return (
             <div className='max-w-6xl mx-auto py-16 px-4'>
-                <h2 className='text-2xl font-semibold'>Your cart is empty.</h2>
+                <h2 className='text-2xl text-[#252B42] font-semibold'>Your cart is empty.</h2>
             </div>
         );
     }
 
+    const handleOrdering = () => {
+        if (!hasSelectedItem) return;
+        history.push('/order');
+    };
+
     return (
         <div className='max-w-6xl mx-auto py-12 px-4'>
-            <h1 className='text-3xl font-bold mb-8'>
+            <h1 className='text-3xl text-[#252B42] font-bold mb-8'>
                 My Cart ({totalCount} Products)
             </h1>
 
-            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 text-[#737373]'>
 
                 <div className='lg:col-span-2'>
 
@@ -94,7 +103,7 @@ const ShoppingCartPage = () => {
                                         {item.product.name}
                                     </h3>
 
-                                    <p className='text-sm text-[#737373] mt-1'>
+                                    <p className='text-sm mt-1'>
                                         Price: ${item.product.price}
                                     </p>
                                 </div>
@@ -171,7 +180,15 @@ const ShoppingCartPage = () => {
                         </div>
 
                         <button
-                            className='w-full mt-6 bg-[#F27A1A] hover:bg-[#D96A14] text-white py-3 rounded-lg font-semibold'
+                            onClick={handleOrdering}
+                            disabled={!hasSelectedItem}
+                            className={`
+                                w-full mt-6 py-3 rounded-lg font-semibold transition
+                                ${hasSelectedItem
+                                    ? "bg-[#F27A1A] hover:bg-[#D96A14] text-white"
+                                    : "bg-[#605F5E] text-[#8F8D8B] cursor-not-allowed"
+                                }
+                            `}
                         >
                             Proceed to Checkout
                         </button>

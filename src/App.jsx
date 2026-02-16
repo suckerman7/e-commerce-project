@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { verifyToken } from "./store/client/clientThunks";
 import { fetchCategories } from "./store/category/categoryThunks";
+import ProtectedRoute from './components/ProtectedRoute';
 
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
@@ -17,6 +18,8 @@ import AboutUsPage from "./pages/AboutUsPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage";
+import OrderPage from './pages/OrderPage';
+import OrderAddressPage from './pages/OrderAddressPage';
 
 import TopBar from './components/TopBar';
 
@@ -58,7 +61,20 @@ function App() {
 
           <Route path='/signup' component={SignUpPage} />
 
-          <Route path='/cart' component={ShoppingCartPage} />
+          <ProtectedRoute
+            path='/cart'
+            component={ShoppingCartPage}
+          />
+
+          <ProtectedRoute
+            path='/order'
+            component={OrderPage}
+          />
+
+          <ProtectedRoute
+            path='/order/address'
+            component={OrderAddressPage}
+          />
         </Switch>
       </PageContent>
 
