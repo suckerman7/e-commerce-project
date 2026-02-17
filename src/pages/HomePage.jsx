@@ -11,7 +11,23 @@ import ClientsSection from '../components/ClientsSection';
 import BlogSection from '../components/BlogSection';
 import BestsellerReverse from '../components/BestsellerReverse';
 
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../store/product/productThunks';
+
 const HomePage = () => {
+
+    const dispatch = useDispatch();
+    const fetchState = useSelector(state => state.product.fetchState);
+
+    useEffect(() => {
+        if (fetchState === "NOT_FETCHED") {
+            dispatch(fetchProducts());
+        }
+    },  [dispatch, fetchState]);
+
+    // console.log("HOME PRODUCTS:", products);
+
     return (
 
         <div className='space-y-10'>

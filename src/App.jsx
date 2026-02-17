@@ -20,6 +20,7 @@ import SignUpPage from "./pages/SignUpPage";
 import ShoppingCartPage from "./pages/ShoppingCartPage";
 import OrderPage from './pages/OrderPage';
 import OrderAddressPage from './pages/OrderAddressPage';
+import OrderListPage from "./pages/OrderListPage";
 
 import TopBar from './components/TopBar';
 
@@ -74,6 +75,11 @@ function App() {
           <ProtectedRoute
             path='/order/address'
             component={OrderAddressPage}
+          />
+
+          <ProtectedRoute
+            path="/orderList"
+            component={OrderListPage}
           />
         </Switch>
       </PageContent>

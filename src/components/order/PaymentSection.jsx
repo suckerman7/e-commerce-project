@@ -1,125 +1,182 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-    fetchCards,
-    selectCard
-} from '../../store/card/cardReducer';
+import { fetchCards, selectCard, removeCard } from '../../store/card/cardReducer';
 import CardForm from './CardForm';
 
+const INSTALLMENTS = [
+  { id: 1, label: "Tek Çekim", multiplier: 1 },
+  { id: 3, label: "3 Taksit", multiplier: 1.05 },
+  { id: 6, label: "6 Taksit", multiplier: 1.10 },
+];
+
 const PaymentSection = ({ selectedInstallment, onSelectInstallment }) => {
-    const dispatch = useDispatch();
-    const { list, selectedCardId, loading } = useSelector(
-        state => state.card
-    );
+  const dispatch = useDispatch();
+  const { list, selectedCardId, loading } = useSelector(state => state.card);
 
-    const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [editCard, setEditCard] = useState(null);
 
-    const INSTALLMENTS = [
-        { id: 1, label: "Tek Çekim", multiplier: 1 },
-        { id: 3, label: "3 Taksit", multiplier: 1.05 },
-        { id: 6, label: "6 Taksit", multiplier: 1.10 },
-    ]
+  useEffect(() => {
+    dispatch(fetchCards());
+  }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(fetchCards());
-    }, [dispatch]);
+  const selectedCard = list.find(c => c.id === selectedCardId);
 
-    return (
-        <div className='bg-white p-6 rounded-lg shadow space-y-6'>
+  const isValidCard =
+    selectedCard &&
+    selectedCard.card_no &&
+    selectedCard.expire_month &&
+    selectedCard.expire_year &&
+    selectedCard.expire_year > 2000;
 
-            <h2 className='text-xl font-bold text-[#F27A1A]'>
-                Kart ile Öde
-            </h2>
+  return (
+    <div className="bg-white p-6 rounded-lg shadow space-y-6">
+      <h2 className="text-xl font-bold text-[#F27A1A]">
+        Kart ile Öde
+      </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
+          {loading && (
+            <p className="text-sm text-[#737373]">Kartlar yükleniyor...</p>
+          )}
 
-                <div className='space-y-4'>
+          {!loading && list.length === 0 && (
+            <p className="text-sm text-[#737373]">
+              Kayıtlı kart bulunamadı.
+            </p>
+          )}
 
-                    {loading && (
-                        <p className='text-sm text-[#737373]'>Kartlar yükleniyor...</p>
-                    )}
+          {list.map(card => {
+            const last4 = card.card_no
+              ? String(card.card_no).replace(/\s/g, "").slice(-4)
+              : "----";
 
-                    {!loading && list.length === 0 && (
-                        <p className='text-sm text-[#737373]'>
-                            Kayıtlı kart bulunamadı.
+            const isThisCardValid =
+              card.card_no &&
+              card.expire_month &&
+              card.expire_year &&
+              card.expire_year > 2000;
+
+            return (
+              <div
+                key={card.id}
+                className={`
+                  border rounded-lg p-4 cursor-pointer
+                  ${selectedCardId === card.id
+                    ? "border-[#F27A1A]"
+                    : "border-[#252B42]"
+                  }
+                  ${!isThisCardValid && "opacity-50 cursor-not-allowed"}
+                `}
+                onClick={() => {
+                  if (isThisCardValid) {
+                    dispatch(selectCard(card.id));
+                  }
+                }}
+              >
+                <div className='flex justify-between items-start'>
+                    <div>
+                        <p className="font-semibold">
+                            **** **** **** {last4}
                         </p>
-                    )}
 
-                    {list.map(card => (
-                        <div
-                            key={card.id}
-                            className={`
-                                border rounded-lg p-4 cursor-pointer
-                                    ${selectedCardId === card.id
-                                        ? "border-[#F27A1A]"
-                                        : "border-[#252B42]"
-                                    }
-                            `}
-                            onClick={() => dispatch(selectCard(card.id))}
+                        <p className="text-sm text-[#737373]">
+                            {card.expire_month ?? "--"}/{card.expire_year ?? "----"}
+                        </p>
+
+                        {!isThisCardValid && (
+                            <p className="text-xs text-[#E74040] mt-1">
+                                Kart bilgileri eksik
+                            </p>
+                        )}
+                    </div>
+
+                    <div className='flex gap-2 text-sm'>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setEditCard(card);
+                                onSelectInstallment(null);
+                                setShowForm(true);
+                            }}
+                            className='bg-[#236AF0] text-white'
                         >
-                            <p className="font-semibold">
-                                **** **** **** {card.card_no.slice(-4)}
-                            </p>
+                            Düzenle
+                        </button>
 
-                            <p className='text-sm text-[#737373]'>
-                                {card.expire_month}/{card.expire_year}
-                            </p>
-                        </div>
-                    ))}
-
-                    <button
-                        onClick={() => setShowForm(!showForm)}
-                        className="border-2 border-dashed rounded-lg p-4 text-center text-[#236AF0]"
-                    >
-                        + Yeni Kart Ekle
-                    </button>
-
-                    {showForm && (
-                        <CardForm onClose={() => setShowForm(false)} />
-                    )}
-
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(removeCard(card.id));
+                            }}
+                            className='bg-[#E74040] text-white'
+                        >
+                            Sil
+                        </button>
+                    </div>
                 </div>
+              </div>
+            );
+          })}
 
-                <div className='border rounded-lg p-4'>
-                    <h3 className='font-semibold mb-4'>
-                        Taksit Seçenekleri
-                    </h3>
+          <button
+            onClick={() => setShowForm(prev => !prev)}
+            className="border-2 border-dashed rounded-lg p-4 text-center text-[#236AF0]"
+          >
+            + Yeni Kart Ekle
+          </button>
 
-                    {!selectedCardId && (
-                        <p className='text-sm text-[#737373]'>
-                            Lütfen bir kart seçin.
-                        </p>
-                    )}
-
-                    {selectedCardId && (
-                        <div className='space-y-2'>
-                            {INSTALLMENTS.map(inst => (
-                                <label
-                                    key={inst.id}
-                                    className={`
-                                        flex items-center justify-between border p-3 rounded cursor-pointer
-                                        ${selectedInstallment === inst.id
-                                            ? "border-[#F27A1A] bg-[#FFF4EC]"
-                                            : "border-[#252B42]"
-                                    }`}
-                                >
-                                    <input
-                                        type="radio"
-                                        name="installment"
-                                        checked={selectedInstallment === inst.id}
-                                        onChange={() => onSelectInstallment(inst.id)}
-                                    />
-
-                                    <span>{inst.label}</span>
-                                </label>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-            </div>
+          {showForm && (
+            <CardForm 
+                card={editCard}
+                onClose={() => {
+                    setShowForm(false);
+                    setEditCard(null);
+                }}
+             />
+          )}
         </div>
-    );
+
+        <div className="border rounded-lg p-4">
+          <h3 className="font-semibold mb-4">
+            Taksit Seçenekleri
+          </h3>
+
+          {!isValidCard && (
+            <p className="text-sm text-[#737373]">
+              Lütfen geçerli bir kart seçin.
+            </p>
+          )}
+
+          {isValidCard && (
+            <div className="space-y-2">
+              {INSTALLMENTS.map(inst => (
+                <label
+                  key={inst.id}
+                  className={`
+                    flex items-center justify-between border p-3 rounded cursor-pointer
+                    ${selectedInstallment === inst.id
+                      ? "border-[#F27A1A] bg-[#FFF4EC]"
+                      : "border-[#252B42]"
+                    }
+                  `}
+                >
+                  <input
+                    type="radio"
+                    name="installment"
+                    checked={selectedInstallment === inst.id}
+                    onChange={() => onSelectInstallment(inst.id)}
+                  />
+                  <span>{inst.label}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default PaymentSection;

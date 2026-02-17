@@ -70,10 +70,13 @@ const cardReducer = createSlice({
             })
             .addCase(fetchCards.fulfilled, (state, action) => {
                 state.loading = false;
-                state.list = action.payload;
 
-                if (action.payload.length > 0) {
-                    state.selectedCardId = action.payload[0].id;
+                const cards = action.payload.cards ?? action.payload;
+
+                state.list = cards;
+
+                if (cards && cards.length > 0) {
+                    state.selectedCardId = cards[0].id;
                 }
             })
             .addCase(fetchCards.rejected, (state, action) => {
@@ -96,14 +99,13 @@ const cardReducer = createSlice({
             })
 
             .addCase(removeCard.fulfilled, (state, action) => {
-                state.list = state.list.filter(
-                    c => c.id !== action.payload
-                );
+                state.list = state.list.filter(c => c.id !== action.payload);
 
                 if (state.selectedCardId === action.payload) {
-                    state.selectedCardId = state.list.length > 0 ? state.list[0].id : null;
+                    state.selectedCardId = state.list.length ? state.list[0].id : null;
                 }
             });
+
     },
 });
 

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ShoppingCart, Menu, Heart, ChevronUp, ChevronDown} from 'lucide-react';
 
@@ -8,6 +8,7 @@ import { getCategoryUrl } from '../utils/categoryHelpers';
 import HeaderAuth from '../components/header/HeaderAuth';
 import ShopDropdown from '../components/header/ShopDropdown';
 import CartDropdown from '../components/header/CartDropdown';
+import UserMenu from '../components/header/UserMenu';
 
 const NAV_LINKS = [
     {to: "/", label: "Home" },
@@ -44,8 +45,34 @@ const Header = () => {
     const womenCategories = categories.filter(c => c.gender === "k");
     const menCategories = categories.filter(c => c.gender === "e");
 
+    useEffect(() => {
+        if (openCart) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [openCart]);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest(".cart-container")) {
+                setOpenCart(false);
+            }
+        };
+
+        document.addEventListener("click", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
     return (
-        <header className='bg-white shadow-sm font-montserrat'>
+        <header className='bg-white shadow-sm font-montserrat relative z-50'>
             <div className='flex items-center justify-between px-4 py-4'>
                 <Link to='/' className='text-2xl font-bold text-[#252B42]'>
                     Bandage
@@ -73,11 +100,15 @@ const Header = () => {
 
                 <div className='hidden lg:flex items-center gap-4'>
 
-                    <HeaderAuth user={user} size="sm"/>
+                    {user ? (
+                        <UserMenu user={user} />
+                    ) : (
+                        <HeaderAuth size="sm" />
+                    )}
 
                     <Search className='w-4 h-4 text-[#23A6F0]'/>
 
-                    <div className='relative'>
+                    <div className='relative cart-container'>
                         <div
                             onClick={() => setOpenCart(prev => !prev)}
                             className='cursor-pointer relative'
@@ -171,19 +202,24 @@ const Header = () => {
                     <Link to="/contact" onClick={() => setOpenMenu(false)}>Contact</Link>
                     <Link to="/team" onClick={() => setOpenMenu(false)}>Team</Link>
 
-                    <HeaderAuth
-                        user={user}
-                        size="lg"
-                        vertical
-                        onAction={() => {
+                    {user ? (
+                        <div className="text-xl">
+                            <UserMenu user={user} />
+                        </div>
+                        ) : (
+                        <HeaderAuth
+                            size="lg"
+                            vertical
+                            onAction={() => {
                             setOpenMenu(false);
                             setOpenShop(false);
-                        }}
-                    />
+                            }}
+                        />
+                    )}
 
                     <div className='flex flex-col gap-6'>
                         <Search className='w-8.5 h-8.5 text-[#23A6F0]'/>
-                        <div className='relative'>
+                        <div className='relative cart-container'>
                             <div
                                 onClick={() => setOpenCart(prev => !prev)}
                                 className='cursor-pointer relative'
@@ -197,7 +233,7 @@ const Header = () => {
 
                             {openCart && (
                                 <>
-                                    <div className='fixed inset-0 bg-black/30 z-40' />
+                                    <div onClick={() => setOpenCart(false)} className='fixed inset-0 bg-black/30 z-40' />
                                     <CartDropdown
                                         cart={cart}
                                         totalCount={totalCount}

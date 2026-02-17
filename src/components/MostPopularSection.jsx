@@ -1,5 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import ProductCard from './ProductCard';
+import { getTopRatedProducts } from "../utils/productSelectors";
 
 const benefits = [
     {
@@ -25,6 +27,13 @@ const benefits = [
 ];
 
 const MostPopularSection = () => {
+
+    const products = useSelector(state => state.product.productList);
+
+    const [mostPopular] = getTopRatedProducts(products, 1);
+
+    if (!mostPopular) return null;
+
     return (
         <section className='bg-[#FAFAFA] font-montserrat'>
 
@@ -33,7 +42,7 @@ const MostPopularSection = () => {
                 <div className='flex flex-col gap-6 lg:flex-row lg:gap-12 lg:items-center'>
                     <div className='w-full'>
                         <img
-                            src='/images/mostpopular.png'
+                            src={mostPopular.images?.[0]?.url}
                             alt="Most Popular"
                             className='w-full h-100 lg:h-130 rounded-2xl object-cover'
                         />
@@ -50,12 +59,8 @@ const MostPopularSection = () => {
                         </div>
 
                         <ProductCard
-                            image="/images/premium_meat.png"
-                            department="English Department"
-                            oldPrice="16.48"
-                            price="6.48"
-                            sales={15}
-                            colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
+                            product={mostPopular}
+                            variant="popular"
                         />
                     </div>
                 </div>

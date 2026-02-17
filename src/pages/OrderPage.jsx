@@ -1,7 +1,9 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import OrderAddressPage from './OrderAddressPage';
 import PaymentSection from '../components/order/PaymentSection';
+import { submitOrder } from '../store/order/OrderReducer';
+import { clearCart } from '../store/cart/cartReducer';
 
 const OrderPage = () => {
     const cart = useSelector(state => state.cart.cart);
@@ -21,6 +23,24 @@ const OrderPage = () => {
     const formatPrice = (price) =>
         `$${price.toFixed(2)}`;
 
+    const dispatch = useDispatch();
+    const { list: cards } = useSelector(state => state.card);
+
+    const { success } = useSelector(state => state.order);
+
+    if (success) {
+        return (
+            <div className="max-w-4xl mx-auto py-20 text-center">
+                <h2 className='text-3xl font-bold text-[#2DC071] mb-4'>
+                    🎉 Siparişiniz Alındı!
+                </h2>
+                <p className='text-[#737373]'>
+                    Siparişiniz başarıyla oluşturuldu. Teşekkür ederiz.
+                </p>
+            </div>
+        );
+    }
+
     if (selectedItems.length === 0) {
         return (
             <div className='max-w-4xl mx-auto py-20 text-center'>
@@ -30,6 +50,33 @@ const OrderPage = () => {
             </div>
         );
     }
+
+    const handlePayment = async () => {
+
+        const selectedCard = cards.find(c => c.id === selectedCardId)
+
+        const payload = {
+            address_id: selectedAddressId,
+            order_date: new Date().toISOString(),
+            card_no: Number(selectedCard.card_no),
+            card_name: selectedCard.name_on_card,
+            card_expire_month: selectedCard.expire_month,
+            card_expire_year: selectedCard.expire_year,
+            card_ccv: 321,
+            price: productTotal,
+            products: selectedItems.map(item => ({
+                product_id: item.product.id,
+                count: item.count,
+                detail: item.product.detail || ""
+            }))
+        };
+
+        const result = await dispatch(submitOrder(payload));
+
+        if (submitOrder.fulfilled.match(result)) {
+            dispatch(clearCart());
+        }
+    };
 
     return (
         <div className="max-w-7xl mx-auto py-12 px-4">
@@ -83,6 +130,7 @@ const OrderPage = () => {
 
                     <button 
                         disabled={isPaymentDisabled}
+                        onClick={handlePayment}
                         className={`
                             w-full mt-6 py-3 rounded-lg font-semibold
                             ${isPaymentDisabled

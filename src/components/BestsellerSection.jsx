@@ -1,8 +1,15 @@
 import React from "react";
+import { useSelector } from 'react-redux';
 import ProductCard from "./ProductCard";
+import { getTopRatedProducts } from "../utils/productSelectors";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BestsellerSection = () => {
+
+    const products = useSelector(state => state.product.productList);
+
+    const bestsellers = getTopRatedProducts(products, 6);
+
     return (
         <section className='font-montserrat max-w-6xl mx-auto px-4'>
             <div className='flex flex-col items-center gap-4 mb-8 lg:flex-row lg:justify-between'>
@@ -30,65 +37,14 @@ const BestsellerSection = () => {
             <div className="w-full h-px bg-[#ECECEC] my-6" />
 
                 <div className='flex flex-col gap-6 pb-4 overflow-x-auto lg:flex-row lg:flex-wrap lg:overflow-visible lg:justify-between'>
-                    <div className='w-full lg:w-[48%]'>
+                    {bestsellers.map(product => (
                         <ProductCard
-                            image='/images/icecream.png'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
+                            key={product.id}
+                            product={product}
+                            variant="bestseller"
+                            className='w-full lg:w-[48%]'
                         />
-                    </div>
-                    
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
-                        <ProductCard
-                            image='/images/apple.jpg'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
-                        />
-                    </div>
-
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
-                        <ProductCard
-                            image='/images/steak.jpg'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
-                        />
-                    </div>
-
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
-                        <ProductCard
-                            image='/images/icecream.png'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
-                        />
-                    </div>
-                    
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
-                        <ProductCard
-                            image='/images/apple.jpg'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
-                        />
-                    </div>
-
-                    <div className='min-w-60 lg:min-w-0 lg:w-[48%]'>
-                        <ProductCard
-                            image='/images/steak.jpg'
-                            title='Graphic Design'
-                            department='English Department'
-                            oldPrice="16.48"
-                            price="6.48"
-                        />
-                    </div>
+                    ))}
                 </div>
         </section>
     );

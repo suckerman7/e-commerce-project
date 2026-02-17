@@ -5,6 +5,7 @@ import categoryReducer from './category/categoryReducer';
 import cartReducer from './cart/cartReducer';
 import addressReducer from "./address/addressReducer";
 import cardReducer from './card/cardReducer';
+import OrderReducer from './order/OrderReducer';
 
 import { saveCartToStorage } from "../utils/cartStorage";
 
@@ -16,12 +17,13 @@ const store = configureStore({
         cart: cartReducer,
         address: addressReducer,
         card: cardReducer,
+        order: OrderReducer,
     },
     devTools: true,
 });
 
 store.subscribe(() => {
-    const { cart } = store.getState().cart;
+    const { cart } = store.getState().cart.cart;
     saveCartToStorage(cart);
 });
 
