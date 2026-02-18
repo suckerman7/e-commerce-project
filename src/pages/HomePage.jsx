@@ -26,8 +26,6 @@ const HomePage = () => {
         }
     },  [dispatch, fetchState]);
 
-    // console.log("HOME PRODUCTS:", products);
-
     return (
 
         <div className='space-y-10'>

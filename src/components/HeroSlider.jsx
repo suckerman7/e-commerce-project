@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react";
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 
 const sliders = [
     {
-        title: "GROCERIES DELIVERY",
+        title: "NEW COLLECTION",
         description: "We know how large objects will act, but things on a small scale.",
-        image: '/images/slider-image-1.jpg',
+        image: '/images/contact-bg.png',
         cta: "Start Now"
     },
     {
@@ -54,9 +56,9 @@ const HeroSlider = () => {
                     {slider.description}
                 </h4>
 
-                <button className='bg-[#23A6F0] text-white text-2xl font-bold px-6 py-3 rounded-lg'>
+                <Link to='/shop' className='bg-[#23A6F0] text-white text-2xl font-bold px-6 py-3 rounded-lg'>
                     {slider.cta}
-                </button>
+                </Link>
             </div>
 
             <button onClick={prevSlider} className='absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 p-2 rounded-full'>
